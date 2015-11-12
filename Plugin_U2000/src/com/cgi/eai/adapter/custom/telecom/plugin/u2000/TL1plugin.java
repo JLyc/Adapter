@@ -78,12 +78,38 @@ public abstract class TL1plugin implements CustomAdapterInterface {
         return null;
     }
 
-    private void getDeviceData()
-    {
+    private Map<String, String> readTL1SucceedResponse(String succeedMsg){
+        Map<String, String> parcialOutput = new HashMap<>();
+        String[] helpString = null;
+        String[] name = null;
+        String[] values = null;
+        Pattern pattern = Pattern.compile("-{9,}(.*)-{3}");
+        Matcher matcher = pattern.matcher(succeedMsg);
+        if(matcher.find()){
+            helpString = matcher.group(1).trim().split("\\s\\s");
+            name = helpString[0].split("\\t");
+            values = helpString[1].split("\\t");
+        }
+        for(int i = 0 ; i<name.length; i++){
+            parcialOutput.put(name[i], values[i]);
+        }
+        return parcialOutput;
+    }
+//  LST-ONTRUNINFO::ALIAS=48575443EBFAA923:1::;
+    private void getDeviceData(Map<String,String> input) throws IOException {
+        if(att.containsKey("allias")){
+            for(Map.Entry inputEntry : input) {
+                String command = att.get("command");
+                command.replace("%" + inputEntry.getKey() + "%", (CharSequence) inputEntry.getValue());
+//            write();
+            }
+        }
+        write("LST-ONTRUNINFO::ALIAS=48575443EBFAA923:1::;");
 
     }
 
 
+    private Map<String, String> outputMap = new HashMap<>();
 
     private void printOutput(String output) {
         String[] helpString = null;
@@ -97,7 +123,20 @@ public abstract class TL1plugin implements CustomAdapterInterface {
             values = helpString[1].split("\\t");
         }
         for(int i = 0 ; i<name.length; i++){
+            String duplicite = outputMap.put(name[i], values[i]);
+            if(duplicite!=null){
+                String uniquebName = name[i];
+                while(outputMap.put(uniquebName,values[i])!=null){
+                    uniquebName += ".1";
+                }
+            }
             System.out.println(name[i]+" : "+ values[i]);
+        }
+    }
+
+    private void printtable(){
+        for(Map.Entry entry : outputMap.entrySet()){
+            System.out.println(entry.getKey()+" : "+entry.getValue());
         }
     }
 

@@ -1,15 +1,10 @@
 package com.cgi.eai.adapter.custom.telecom.plugin.SNMP.plugin_properties;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.commons.logging.*;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.lang.String;import java.lang.System;import java.nio.file.FileSystems;
-import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.*;
+import java.nio.file.*;
+import java.util.*;
 
 /**
  * Created by JLyc on 8. 4. 2015.
@@ -19,7 +14,8 @@ public class WeatherProbesDefaultOID {
     private static Map<String, String> responseObject = new HashMap<>();
 
     public static Map<String, String> loadOIDTranslator() {
-        Path oidTranslationPropertiesFile = FileSystems.getDefault().getPath(System.getProperty("user.dir"), "plugin", "WeatherProbesOIDTranslations.prop");
+//        System.getProperty("user.dir")
+        Path oidTranslationPropertiesFile = FileSystems.getDefault().getPath("WeatherProbesOIDTranslations.prop");
         try {
             BufferedReader readProperties = new BufferedReader(new FileReader(oidTranslationPropertiesFile.toFile()));
             String _line;

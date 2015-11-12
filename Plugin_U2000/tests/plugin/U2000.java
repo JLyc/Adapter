@@ -36,7 +36,7 @@ public class U2000 {
         requestObject.put("user-pwd","#!DGtwPAzMD9C3k/O9WXE6vVDetHQXpjjbgNdzcZvriT0=" );
         requestObject.put("retries-count","2" );
         requestObject.put("timeout","100" );
-        requestObject.put("")
+//        requestObject.put("")
     }
 
     @Test

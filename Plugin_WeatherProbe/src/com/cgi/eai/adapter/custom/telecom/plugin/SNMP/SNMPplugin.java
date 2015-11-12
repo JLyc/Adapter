@@ -1,24 +1,14 @@
 package com.cgi.eai.adapter.custom.telecom.plugin.SNMP;
 
-import com.cgi.eai.adapter.custom.telecom.core.CustomAdapterInterface;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.snmp4j.CommunityTarget;
-import org.snmp4j.PDU;
-import org.snmp4j.Snmp;
-import org.snmp4j.TransportMapping;
-import org.snmp4j.smi.OID;
-import org.snmp4j.smi.OctetString;
-import org.snmp4j.smi.UdpAddress;
-import org.snmp4j.smi.VariableBinding;
-import org.snmp4j.transport.DefaultUdpTransportMapping;
-import org.snmp4j.util.DefaultPDUFactory;
-import org.snmp4j.util.TableEvent;
-import org.snmp4j.util.TableUtils;
+import org.apache.commons.logging.*;
+import org.snmp4j.*;
+import org.snmp4j.event.*;
+import org.snmp4j.smi.*;
+import org.snmp4j.transport.*;
+import org.snmp4j.util.*;
+import telecom.core.*;
 
-import java.lang.Exception;import java.lang.Integer;import java.lang.String;import java.lang.System;import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by JLyc on 9. 4. 2015.
@@ -45,6 +35,14 @@ public abstract class SNMPplugin implements CustomAdapterInterface {
         TransportMapping<?> transport = new DefaultUdpTransportMapping();
         transport.listen();
         Snmp snmp = new Snmp(transport);
+
+        PDU pdu = new PDU();
+        OID oid = new OID(getOID());
+        pdu.add(new VariableBinding(oid));
+        pdu.setType(PDU.GET);
+
+        ResponseEvent event = snmp.send(pdu, comtarget, null);
+        System.out.println(event.getResponse().get(0).getVariable().toString());
 
         TableUtils utils = new TableUtils(snmp, new DefaultPDUFactory(PDU.GETBULK));
         utils.setMaxNumRowsPerPDU(20);

@@ -31,19 +31,22 @@ public class WeatherProbesTest {
     public void prepareRequest() {
     	requestObject.put("system", "WeatherProbes");
         requestObject.put("snmp-version","1");
-        requestObject.put("ip-address","10.180.13.131" );
-//        requestObject.put("ip-address","127.0.0.1" );
-        requestObject.put("port","161" );
+//        requestObject.put("ip-address","10.180.13.131" );
+        requestObject.put("ip-address","localhost" );
+        requestObject.put("port","1611" );
+//        requestObject.put("port","161" );
         requestObject.put("community","public" );
         requestObject.put("request-type","GET" );
-        requestObject.put("oid-value", "1.3.6.1.4.1.27070.3.4.1.2");
+//        requestObject.put("oid-value", "1.3.6.1.4.1.27070.3.4.1.2");
+        requestObject.put("oid-value", "1.3.6.1.4.1.27070.3.4.1.2.1.3.1");
+//        requestObject.put("oid-value", ".1.3.6.1.2.1.1.1.0");
         requestObject.put("retries-count","2" );
         requestObject.put("timeout","100" );
     }
 
     @Test
     public void requestTest() throws ClassNotFoundException, IllegalAccessException, InstantiationException {
-        java.lang.Class<CustomAdapterInterface> clazz = (Class<CustomAdapterInterface>) Class.forName("plugins.WeatherProbes");
+        java.lang.Class<CustomAdapterInterface> clazz = (Class<CustomAdapterInterface>) Class.forName("com.cgi.eai.adapter.custom.telecom.plugin.SNMP.WeatherProbes");
         CustomAdapterInterface ec = clazz.newInstance();
         Map<String, String> response = null;
         Logger root = Logger.getRootLogger();
