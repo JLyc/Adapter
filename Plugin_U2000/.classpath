@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="/Plugin_U2000/src"/>
+	<classpathentry kind="src" path="/Plugin_U2000/tests"/>
+	<classpathentry kind="src" path="/Plugin_U2000/config"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/junit-4"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/logging"/>
+	<classpathentry kind="output" path="/out/production/Plugin_U2000"/>
+</classpath>

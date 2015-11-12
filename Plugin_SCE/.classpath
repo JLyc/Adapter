@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="/Plugin_SCE/src"/>
+	<classpathentry kind="src" path="/Plugin_SCE/tests"/>
+	<classpathentry kind="src" path="/Plugin_SCE/config"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/junit-4"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/logging"/>
+	<classpathentry kind="output" path="/out/production/Plugin_SCE"/>
+</classpath>

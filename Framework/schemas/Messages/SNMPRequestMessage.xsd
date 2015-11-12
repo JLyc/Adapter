@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.cgi.com/eai/adapter/custom/telecom/config"
+            targetNamespace="http://www.cgi.com/eai/adapter/custom/telecom/config" elementFormDefault="qualified">
+    <xsd:element name="snmp-request-message">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:annotation>
+                    <xsd:documentation>Format of SNMP request</xsd:documentation>
+                </xsd:annotation>
+                <xsd:element name="system" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+                <xsd:element name="snmp-version" type="snmp-version" minOccurs="1" maxOccurs="1"/>
+                <xsd:element name="ip-address" type="ip-address" minOccurs="1" maxOccurs="1"/>
+                <xsd:element name="port" type="xsd:integer" minOccurs="1" maxOccurs="1"/>
+                <xsd:element name="community" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+                <xsd:element name="request-type" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+                <xsd:element name="oid-name" type="oid-name" minOccurs="1" maxOccurs="1"/>
+                <xsd:element name="retries-count" type="xsd:integer" maxOccurs="1"/>
+                <xsd:element name="timeout" type="xsd:integer" maxOccurs="1"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:simpleType name="snmp-version">
+        <xsd:annotation>
+            <xsd:documentation>Valid snmp version values</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:integer">
+            <xsd:enumeration value="0"/>
+            <xsd:enumeration value="1"/>
+            <xsd:enumeration value="3"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="ip-address">
+        <xsd:annotation>
+            <xsd:documentation>Valid snmp version values</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+            <xsd:pattern
+                    value="([01]?\d\d?|2[0-4]\d|25[0-5])\.([01]?\d\d?|2[0-4]\d|25[0-5])\.([01]?\d\d?|2[0-4]\d|25[0-5])\.([01]?\d\d?|2[0-4]\d|25[0-5])"/>
+
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="oid-name">
+        <xsd:annotation>
+            <xsd:documentation>Valid oid value</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+            <xsd:pattern value="(\.(\d{1,})?)+"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+</xsd:schema>

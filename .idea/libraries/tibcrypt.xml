@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="tibcrypt">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/Plugin_U2000/libs/tibcrypt.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

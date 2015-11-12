@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.cgi.com/eai/adapter/custom/telecom/config" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="snmp-response-message" type="con:snmp-response-messageType" xmlns:con="http://www.cgi.com/eai/adapter/custom/telecom/config"/>
+  <xs:complexType name="successType">
+    <xs:choice maxOccurs="unbounded" minOccurs="0">
+      <xs:element type="xs:string" name="name"/>
+      <xs:element type="xs:string" name="value"/>
+      <xs:element type="successType" name="description" />
+    </xs:choice>
+  </xs:complexType>
+  <xs:complexType name="snmp-response-messageType">
+    <xs:sequence>
+      <xs:element type="successType" name="success"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

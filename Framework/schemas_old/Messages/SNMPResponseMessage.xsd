@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.cgi.com/eai/adapter/custom/telecom/config"
+            targetNamespace="http://www.cgi.com/eai/adapter/custom/telecom/config" elementFormDefault="qualified">
+    <xsd:element name="snmp-response-message" type="chose"/>
+
+    <xsd:complexType name="chose">
+        <xsd:choice>
+            <xsd:annotation>
+                <xsd:documentation>Format of SNMP response</xsd:documentation>
+            </xsd:annotation>
+            <xsd:element name="fail" type="error"/>
+            <xsd:element name="success" type="output"/>
+        </xsd:choice>
+    </xsd:complexType>
+
+    <xsd:complexType name="error">
+        <xsd:sequence>
+            <xsd:element name="error" type="xsd:string" minOccurs="1" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="output">
+        <xsd:sequence>
+            <xsd:element name="name" type="xsd:string" maxOccurs="unbounded"/>
+            <xsd:element name="value" type="xsd:string" maxOccurs="unbounded"/>
+            <xsd:element name="subValues" type="output" minOccurs="0" maxOccurs="1"/>
+        </xsd:sequence>
+    </xsd:complexType>
+</xsd:schema>

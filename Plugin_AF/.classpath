@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="/Plugin_AF/src"/>
+	<classpathentry kind="src" path="/Plugin_AF/tests"/>
+	<classpathentry kind="src" path="/Plugin_AF/config"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/snmp4j-2.3.3_af"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/junit-4"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/logging"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/Framework"/>
+	<classpathentry kind="output" path="/out/production/Plugin_AF"/>
+</classpath>

@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2010 rel. 2 (http://www.altova.com) by Peter Kalinak (Logica Slovakia s.r.o.) -->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:cc="http://www.logica.com/eai/test/bw/config" targetNamespace="http://www.logica.com/eai/test/bw/config" elementFormDefault="qualified">
+    <xsd:element name="bw-test-config">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:annotation>
+                    <xsd:documentation>
+                        Root of BW Test configuration file.
+                    </xsd:documentation>
+                </xsd:annotation>
+                <xsd:element name="version" type="xsd:string">
+                    <xsd:annotation>
+                        <xsd:documentation>
+                            Version of CAS Adapter.
+                        </xsd:documentation>
+                    </xsd:annotation>
+                </xsd:element>
+                <xsd:element name="db-descriptor" type="cc:db-descriptor" minOccurs="0" maxOccurs="unbounded"/>
+                <xsd:element name="jms-descriptor" type="cc:jms-descriptor" minOccurs="0"/>
+                <xsd:element name="tibrv-descriptor" type="cc:tibrv-descriptor" minOccurs="0"/>
+                <xsd:element name="http-descriptor" type="cc:http-descriptor" minOccurs="0" maxOccurs="unbounded"/>
+                <xsd:element name="tcp-descriptor" type="cc:tcp-descriptor" minOccurs="0" maxOccurs="unbounded"/>
+                <xsd:element name="tibhawk-descriptor" minOccurs="0">
+                    <xsd:complexType>
+                        <xsd:choice>
+                            <xsd:element name="rv" type="cc:tibrv-descriptor"/>
+                            <xsd:element name="jms" type="cc:jms-descriptor"/>
+                        </xsd:choice>
+                    </xsd:complexType>
+                </xsd:element>
+                <xsd:element name="domain-descriptor" type="cc:domain-descriptor" minOccurs="0"/>
+                <xsd:element name="test-suite-descriptor" type="cc:test-suite-descriptor" minOccurs="0" maxOccurs="unbounded"/>
+                <xsd:element name="property" type="cc:property" minOccurs="0" maxOccurs="unbounded"/>
+                <xsd:element name="jtest-descriptor" type="cc:jtest-descriptor" minOccurs="0" maxOccurs="unbounded"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:complexType name="db-descriptor">
+        <xsd:sequence>
+            <xsd:annotation>
+                <xsd:documentation>
+                    Descriptor of database connection. It is used for lookup transformations only.
+                </xsd:documentation>
+            </xsd:annotation>
+            <xsd:element name="name" type="xsd:string"/>
+            <xsd:element name="driver" type="xsd:string">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        Driver class name. E.g. oracle.jdbc.driver.OracleDriver
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="url" type="xsd:string">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        Database connection URL. E.g. jdbc:oracle:thin:@server:1521:clarify
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="user" type="xsd:string">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        Database user.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="password" type="xsd:string">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        Password, which is used to log in to database.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="maxPoolSize" type="xsd:int"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="jms-descriptor">
+        <xsd:sequence>
+            <xsd:annotation>
+                <xsd:documentation>
+                    Descriptor of JMS connection.
+                </xsd:documentation>
+            </xsd:annotation>
+            <xsd:element name="context" type="xsd:string"/>
+            <xsd:element name="factory" type="xsd:string"/>
+            <xsd:element name="login" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="password" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="url" type="xsd:string"/>
+            <xsd:element name="jndi_login" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="jndi_password" type="xsd:string" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="tibrv-descriptor">
+        <xsd:sequence>
+            <xsd:annotation>
+                <xsd:documentation>
+                    Descriptor of Tibco connection.
+                </xsd:documentation>
+            </xsd:annotation>
+            <xsd:element name="service" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="network" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="daemon" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="cmname" type="xsd:string" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="http-descriptor">
+        <xsd:sequence>
+            <xsd:element name="port" type="xsd:int"/>
+            <xsd:element name="name" type="xsd:string" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="tcp-descriptor">
+        <xsd:sequence>
+            <xsd:element name="name" type="xsd:string"/>
+            <xsd:element name="host" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="port" type="xsd:int"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="domain-descriptor">
+        <xsd:sequence>
+            <xsd:element name="domainName" type="xsd:string">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        Name of the TIBCO domain (like LOGICA-TST)
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="test-suite-descriptor">
+        <xsd:sequence>
+            <xsd:annotation>
+                <xsd:documentation>
+                    Describes some test suites (list of processes to be turned off in particular)
+                </xsd:documentation>
+            </xsd:annotation>
+            <xsd:element name="name" type="xsd:string"/>
+            <xsd:element name="suspend-resume-descriptor" type="cc:suspend-resume-descriptor" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="process-descriptor">
+        <xsd:sequence>
+            <xsd:element name="processName" type="xsd:string"/>
+            <xsd:element name="suspend" type="xsd:boolean"/>
+            <xsd:element name="when" type="xsd:string"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="suspend-resume-descriptor">
+        <xsd:sequence>
+            <xsd:element name="tibcoRuntimeAgent" type="cc:tibcoRuntimeAgent-descriptor" minOccurs="0"/>
+            <xsd:element name="microAgent" type="cc:microAgent-descriptor" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="microAgent-descriptor">
+        <xsd:sequence>
+            <xsd:element name="microagentName" type="xsd:string"/>
+            <xsd:element name="deploymentName" type="xsd:string"/>
+            <xsd:element name="process" type="cc:process-descriptor" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="property">
+        <xsd:sequence>
+            <xsd:element name="name" type="xsd:string"/>
+            <xsd:element name="value" type="xsd:string"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="tibcoRuntimeAgent-descriptor">
+        <xsd:sequence>
+            <xsd:element name="engine" type="cc:engine-descriptor" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="engine-descriptor">
+        <xsd:sequence>
+            <xsd:element name="engineName" type="xsd:string"/>
+            <xsd:element name="deploymentName" type="xsd:string"/>
+            <xsd:element name="suspend" type="xsd:boolean"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="jtest-descriptor">
+        <xsd:sequence>
+            <xsd:element name="name" type="xsd:string"/>
+            <xsd:element name="ear" type="xsd:string"/>
+            <xsd:element name="par" type="xsd:string"/>
+            <xsd:element name="host" type="xsd:string"/>
+            <xsd:element name="task" type="cc:task" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="task">
+        <xsd:sequence>
+            <xsd:element name="name" type="xsd:string"/>
+            <xsd:element name="value" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+</xsd:schema>

@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="snmp4j-2.3.3_af">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/Plugin_AF/libs/snmp4j-2.3.3.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

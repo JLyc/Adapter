@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="/Framework/src"/>
+	<classpathentry kind="src" path="/Framework/schemas"/>
+	<classpathentry kind="src" path="/Framework/config"/>
+	<classpathentry kind="src" path="/Framework/tests"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/logging"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/generatedConfigFile"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/junit-4"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/ami"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/tibrvj"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/tibjms"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JmsRvApi"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

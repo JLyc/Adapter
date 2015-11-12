@@ -1,0 +1,49 @@
+<project name="BWTestFramework" default="generateCodeFromSchema">
+
+    <!-- Properties: project. -->
+    <property name="src" value="${basedir}/src"/>
+    <property name="generated-src" value="${basedir}/generatedSrc"/>
+    <property name="generated-classes" value="${basedir}/generatedClasses"/>
+    <property name="generatedJar" value="generated.jar"/>
+    <property name="schema" value="${basedir}/schemas"/>
+    <property name="out" value="${basedir}/classes"/>
+    <property name="lib" value="${basedir}/libs"/>
+
+    <target name="init">
+        <tstamp/>
+    </target>
+
+    <target name="prepareGeneration" depends="init">
+        <delete dir="${generated-src}"/>
+        <delete dir="${generated-classes}"/>
+        <mkdir dir="${generated-src}"/>
+        <mkdir dir="${generated-classes}"/>
+    </target>
+
+    <!-- Target: generate. Generate source code from XSD.  -->
+    <target name="generateCodeFromSchema" depends="prepareGeneration">
+        <java classname="com.sun.tools.internal.xjc.XJCFacade">
+<!--            <arg value="-source"/>
+            <arg value="2.0"/>-->
+            <arg value="-d"/>
+            <arg value="${generated-src}"/>
+            <arg value="${schema}"/>
+        </java>
+
+        <javac srcdir="${generated-src}" debug="true" destdir="${generated-classes}"/>
+        <jar destfile="${lib}/generated-src.jar">
+            <fileset dir="${generated-src}"/>
+        </jar>
+        <delete dir="${generated-src}"/>
+        <jar destfile="${lib}/${generatedJar}">
+            <fileset dir="${generated-classes}"/>
+        </jar>
+        <copy todir="${out}" overwrite="true" filtering="on">
+            <fileset dir="${generated-classes}">
+                <include name="**/*.class"/>
+            </fileset>
+        </copy>
+        <delete dir="${generated-classes}"/>
+    </target>
+
+</project>

@@ -1,0 +1,4 @@
+getStatus=LST-ONTRUNINFO::ALIAS=%alias%:%CTAG%::%optional%;
+getConfig=LST-ONTDDMDETAIL::ALIAS=%alias%:%CTAG%::;|LST-ONT::DID=%id%:%CTAG%::%optional%;|LST-ONTDETAIL::ALIAS=%alias%:%CTAG%::%optional%;
+getUpstrem=LST-ONTPORT::ALIAS=%alias%:%CTAG%::%optional%;|LST-ONTPORTDETAIL::ALIAS=%alias%:%CTAG%::%optional%;LST-ONTDBAPROF::DID=%id%,FN=%frame%,SN=%slot%,PN=%port%,ONTID=%ont%:%CTAG%::%optional%;
+setSipPwd=SET-ONTUSERINFO::(DID=Device-id|DEV=Device-name),((FN=Frame-id,SN=Slot-id,PN=Portid,(ONTID=ont-id|PWD=password|ONTSN=ont-SN|ONTMAC=ont-MAC))|(PWD=password)(ONTKEY=ont-key)),USERTYPE=user-type:CTAG::PASSWORD=user-password;

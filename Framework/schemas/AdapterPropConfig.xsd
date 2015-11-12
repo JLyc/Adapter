@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.cgi.com/eai/adapter/custom/telecom/config"
+            targetNamespace="http://www.cgi.com/eai/adapter/custom/telecom/config" elementFormDefault="qualified">
+    <xsd:element name="custom-adapter-config">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:annotation>
+                    <xsd:documentation>Root of BW Custom Adapter configuration file.</xsd:documentation>
+                </xsd:annotation>
+                <xsd:element name="version" type="xsd:string">
+                    <xsd:annotation>
+                        <xsd:documentation>Version of Custom Adapter.</xsd:documentation>
+                    </xsd:annotation>
+                </xsd:element>
+                <xsd:element name="communication-type" type="communication-type" minOccurs="0"/>
+                <xsd:element name="jms-descriptor" type="jms-descriptor" minOccurs="0"/>
+                <xsd:element name="tibrv-descriptor" type="tibrv-descriptor" minOccurs="0"/>
+                <xsd:element name="tibhawkrv-descriptor" type="tibhawkrv-descriptor" minOccurs="0"/>
+                <xsd:element name="subject-descriptor" type="subject-descriptor" minOccurs="0"/>
+                <xsd:element name="threads-descriptor" type="threads-descriptor" minOccurs="0"/>
+                <xsd:element name="plugin-def-prop" type="xsd:string" minOccurs="0"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:complexType name="communication-type">
+        <xsd:sequence>
+            <xsd:annotation>
+                <xsd:documentation>Communication type.</xsd:documentation>
+            </xsd:annotation>
+            <xsd:element name="rv" maxOccurs="1" type="xsd:boolean"/>
+            <xsd:element name="jms" maxOccurs="1" type="xsd:boolean"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="threads-descriptor">
+        <xsd:sequence>
+            <xsd:annotation>
+                <xsd:documentation>Subject to listen on.</xsd:documentation>
+            </xsd:annotation>
+            <xsd:element name="threadsNo" maxOccurs="1" type="xsd:integer">
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="subject-descriptor">
+        <xsd:sequence>
+            <xsd:annotation>
+                <xsd:documentation>Subject to listen on.</xsd:documentation>
+            </xsd:annotation>
+            <xsd:element name="subject" minOccurs="1" maxOccurs="1" type="xsd:string">
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="jms-descriptor">
+        <xsd:sequence>
+            <xsd:annotation>
+                <xsd:documentation>Descriptor of JMS connection.</xsd:documentation>
+            </xsd:annotation>
+            <xsd:element name="context" type="xsd:string"/>
+            <xsd:element name="queueFactory" type="xsd:string"/>
+            <xsd:element name="topicFactory" type="xsd:string"/>
+            <xsd:element name="login" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="password" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="url" type="xsd:string"/>
+            <xsd:element name="jndi_login" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="jndi_password" type="xsd:string" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="tibrv-descriptor">
+        <xsd:sequence>
+            <xsd:annotation>
+                <xsd:documentation>
+                    Descriptor of Tibco connection.
+                </xsd:documentation>
+            </xsd:annotation>
+            <xsd:element name="service" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="network" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="daemon" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="cmname" type="xsd:string" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="tibhawkrv-descriptor">
+        <xsd:sequence>
+            <xsd:annotation>
+                <xsd:documentation>
+                    Descriptor of Tibco connection.
+
+                </xsd:documentation>
+            </xsd:annotation>
+            <xsd:element name="monitor-enabled" type="xsd:boolean" minOccurs="1"/>
+            <xsd:element name="service" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="network" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="daemon" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="cmname" type="xsd:string" minOccurs="0"/>
+            <!--Do not edit below this line-->
+            <xsd:element name="micro-agent-name" type="xsd:string" minOccurs="1" fixed="WeatherProbes"/>
+        </xsd:sequence>
+    </xsd:complexType>
+</xsd:schema>

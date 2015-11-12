@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="tibjms">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/Framework/libs/jms.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
