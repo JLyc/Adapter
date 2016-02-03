@@ -37,5 +37,7 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="tibrvj64" level="project" />
+    <orderEntry type="library" name="native" level="project" />
   </component>
 </module>

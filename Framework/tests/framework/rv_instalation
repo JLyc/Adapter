@@ -1,0 +1,8 @@
+/etc/ld.so.conf.d
+
+create file rv_shared_libs.conf
+
+input line to *.so files /opt/tibco7/tibrv/8.4/lib
+
+run with
+-Djava.library.path=/opt/tibco7/tibrv/8.4/lib

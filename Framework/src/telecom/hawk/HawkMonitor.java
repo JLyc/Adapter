@@ -7,6 +7,11 @@ import com.tibco.tibrv.TibrvQueue;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import telecom.config.Configuration;
+import telecom.core.AdapterCore;
+import telecom.statistic.AdapterStatistic;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by JLyc on 30. 3. 2015.
@@ -17,31 +22,40 @@ public class HawkMonitor implements Runnable {
     private TibrvQueue _queue;
     private boolean isListening = true;
 
+    private Map<String, String> adapterStatistic;
+
     class methodGetStatus extends AmiMethod {
 
         public methodGetStatus() {
-            super("get status", "return", AmiConstants.METHOD_TYPE_INFO);
+            super("getAdapterStatus", "Return statistic of adapter", AmiConstants.METHOD_TYPE_INFO);
+            adapterStatistic = new HashMap<>(AdapterStatistic.getStatistic());
+            for(Map.Entry<String, String> statisticName : adapterStatistic.entrySet()){
+                setIndexName(statisticName.getKey());
+            }
         }
 
         @Override
         public AmiParameterList getArguments() {
-
             return null;
         }
 
         @Override
         public AmiParameterList getReturns() {
             AmiParameterList parameterList = new AmiParameterList();
-            parameterList.add(new AmiParameter("Name", "Help", ""));
-
+            adapterStatistic = new HashMap<>(AdapterStatistic.getStatistic());
+            for(Map.Entry<String, String> statisticName : adapterStatistic.entrySet()){
+                parameterList.add(new AmiParameter(statisticName.getKey(), statisticName.getValue()));
+            }
             return parameterList;
         }
 
         @Override
         public AmiParameterList onInvoke(AmiParameterList amiParameterList) throws Exception {
-        	AmiParameterList parameterList = new AmiParameterList();
-            parameterList.add(new AmiParameter("Name", "Help", "value"));
-            parameterList.add(new AmiParameter("Namenext", "Help1", "14"));
+            adapterStatistic = new HashMap<>(AdapterStatistic.getStatistic());
+            AmiParameterList parameterList = new AmiParameterList();
+            for (Map.Entry<String, String> statisticName : adapterStatistic.entrySet()) {
+                parameterList.add(new AmiParameter(statisticName.getKey(), statisticName.getValue()));
+            }
 
             return parameterList;
         }
@@ -50,7 +64,7 @@ public class HawkMonitor implements Runnable {
     class methodKill extends AmiMethod {
 
         public methodKill() {
-            super("Kill", "Adapter instance is killed and resources released. Use with caution. A message can be processed without response being sent to JMS.", AmiConstants.METHOD_TYPE_ACTION);
+            super("shutDownAdapter", "Adapter instance is killed and resources released. Use with caution.", AmiConstants.METHOD_TYPE_ACTION);
         }
 
         public AmiParameterList getArguments() {
@@ -62,11 +76,7 @@ public class HawkMonitor implements Runnable {
         }
 
         public AmiParameterList onInvoke(AmiParameterList arg0) throws Exception {
-//            String result = _manager.kill();
-//            if ( !result.equals("Success") ) {
-//                throw new AmiException(AmiErrors.AMI_REPLY_ERR, result);
-//            }
-
+            AdapterCore.shutDown(1799);
             return null;
         }
     }
@@ -90,6 +100,7 @@ public class HawkMonitor implements Runnable {
                     Configuration.getInstance().getTibhawkrvDescriptor().getMicroAgentName(), "Custom adapter instance", null);
 
             _session.addMethod(new methodGetStatus());
+            _session.addMethod(new methodKill());
             _session.addMethods(_session);
             _session.createCommonMethods("Synch (Custom Adapter Application)",
                     "1.0.0",

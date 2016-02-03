@@ -14,6 +14,7 @@ import org.snmp4j.transport.DefaultUdpTransportMapping;
 import org.snmp4j.util.DefaultPDUFactory;
 import org.snmp4j.util.TableEvent;
 import org.snmp4j.util.TableUtils;
+import org.w3c.dom.*;
 import telecom.core.CustomAdapterInterface;
 
 import java.util.HashMap;
@@ -38,7 +39,7 @@ public abstract class SNMPplugin implements CustomAdapterInterface {
      * @return response Map object
      * @throws Exception in case of fail message response
      */
-    public Map<String, String> request(Map<String, String> att) throws Exception {
+    public Document request(Map<String, String> att) throws Exception {
         this.att = att;
 
         CommunityTarget comtarget = getCommunityTarget();

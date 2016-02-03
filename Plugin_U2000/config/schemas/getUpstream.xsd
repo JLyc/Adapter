@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.cgi.com/eai/adapter/custom/telecom/config"
+           targetNamespace="http://www.cgi.com/eai/adapter/custom/telecom/config">
+    <xs:element type="tl1-response-messageType" name="tl1-response-message"/>
+
+    <xs:complexType name="tl1-response-messageType">
+        <xs:sequence>
+            <xs:element type="statusType" name="status"/>
+            <xs:element type="getUpstreamType" name="getUpstream"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="statusType">
+        <xs:sequence>
+            <xs:element type="xs:string" name="result" minOccurs="1"/>
+            <xs:element type="xs:string" name="description" minOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="getUpstreamType">
+        <xs:sequence>
+            <xs:element type="groupType" name="group" maxOccurs="unbounded" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="groupType">
+        <xs:all>
+            <xs:element type="xs:string" name="DID"/>
+            <xs:element type="xs:string" name="SN"/>
+            <xs:element type="xs:string" name="FN"/>
+            <xs:element type="xs:string" name="PN"/>
+            <xs:element type="xs:string" name="ONTID"/>
+            <xs:element type="xs:string" name="ACTUALPT" minOccurs="0"/>
+            <xs:element type="xs:string" name="ADMINSTAT" minOccurs="0"/>
+            <xs:element type="xs:string" name="CODEMODE" minOccurs="0"/>
+            <xs:element type="xs:string" name="COPYPRIORITYPOLICY" minOccurs="0"/>
+            <xs:element type="xs:string" name="ALLOCID" minOccurs="0"/>
+            <xs:element type="xs:string" name="DBAPROF" minOccurs="0"/>
+            <xs:element type="xs:string" name="ONTPORTID" minOccurs="0"/>
+            <xs:element type="xs:string" name="ONTPORTTYPE" minOccurs="0"/>
+            <xs:element type="xs:string" name="DUPLEX" minOccurs="0"/>
+            <xs:element type="xs:string" name="FLOWCTRL" minOccurs="0"/>
+            <xs:element type="xs:string" name="LOOPBACK" minOccurs="0"/>
+            <xs:element type="xs:string" name="NEGOTIATE" minOccurs="0"/>
+            <xs:element type="xs:string" name="ONTPSTAT" minOccurs="0"/>
+            <xs:element type="xs:string" name="PRIORITY" minOccurs="0"/>
+            <xs:element type="xs:string" name="QINQ" minOccurs="0"/>
+            <xs:element type="xs:string" name="SPEED" minOccurs="0"/>
+            <xs:element type="xs:string" name="VLANDEFAULT" minOccurs="0"/>
+            <xs:element type="xs:string" name="TCONTID" minOccurs="0"/>
+        </xs:all>
+    </xs:complexType>
+</xs:schema>

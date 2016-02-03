@@ -69,12 +69,41 @@ public class JmsCommunication implements CommunicationInterface {
     }
 
     @Override
+    public void send(final JmsMessageInterfaceWraper replyMsg, String msg){
+//        Destination destination = msg.getMessage().getJMSReplyTo();
+//        LOG.warn(destination);
+//        if (destination != null) {
+            MessageProducer producer = null;
+            try {
+                Destination destination = JmsFactory.getInstance().createDestination("customAdapter.out", JmsType.QUEUE);
+                producer = JmsFactory.getInstance().createProducer(destination);
+                producer.send(replyMsg.getMessage());
+                LOG.info("Reply sent to QUEUE " + destination);
+            } catch (JMSException e) {
+                e.printStackTrace();
+            } finally {
+                if (producer != null) {
+                    try {
+                        producer.close();
+                    } catch (JMSException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+//        } else {
+//            LOG.error("No destination to reply to...");
+//        }
+    }
+
+    @Override
     public void run() {
         init();
 
         while (isListening) {
-            JmsMessageInterfaceWraper msg = jmsRecorder.getMsg(1);
+            JmsMessageInterfaceWraper msg = (JmsMessageInterfaceWraper) jmsRecorder.getMsg(1);
+//            LOG.debug("listening ! ! !");
             if (msg != null) {
+                LOG.debug("sending message to executor ! ! !");
                 communicationClient.request(msg);
             }
         }
@@ -84,6 +113,7 @@ public class JmsCommunication implements CommunicationInterface {
     private void sendReply(final JmsMessageInterfaceWraper replyMsg, final JmsMessageInterfaceWraper msg)
             throws JMSException {
         Destination destination = msg.getMessage().getJMSReplyTo();
+        LOG.warn(destination);
         if (destination != null) {
             MessageProducer producer = null;
             try {
@@ -99,4 +129,6 @@ public class JmsCommunication implements CommunicationInterface {
             LOG.error("No destination to reply to...");
         }
     }
+
+
 }

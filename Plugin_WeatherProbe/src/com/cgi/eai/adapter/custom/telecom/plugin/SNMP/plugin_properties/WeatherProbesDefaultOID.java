@@ -14,12 +14,14 @@ public class WeatherProbesDefaultOID {
     private static Map<String, String> responseObject = new HashMap<>();
 
     public static Map<String, String> loadOIDTranslator() {
-//        System.getProperty("user.dir")
-        Path oidTranslationPropertiesFile = FileSystems.getDefault().getPath("WeatherProbesOIDTranslations.prop");
+        Path oidTranslationPropertiesFile = FileSystems.getDefault().getPath("config"+ FileSystems.getDefault().getSeparator()+"WeatherProbesOIDTranslations.prop");
         try {
             BufferedReader readProperties = new BufferedReader(new FileReader(oidTranslationPropertiesFile.toFile()));
             String _line;
             while ((_line = readProperties.readLine()) != null) {
+                if (_line.isEmpty()) {
+                    break;
+                }
                 String[] _split = _line.split("=");
                 responseObject.put(_split[0], _split[1]);
             }

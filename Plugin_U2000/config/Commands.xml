@@ -1,0 +1,21 @@
+<operations>
+    <getAlias>
+        <command>LST-ONTRUNINFO::ALIAS=%ALIAS%:1::;</command>
+    </getAlias>
+    <getStatus>
+        <command>LST-ONTRUNINFO::DID=%DID%,FN=%FN%,SN=%SN%,PN=%PN%,ONTID=%ONTID%:1::;</command>
+    </getStatus>
+    <getConfig>
+        <command>LST-ONTDETAIL::ALIAS=%ALIAS%:1::;</command>
+        <command>LST-ONTDDMDETAIL::ALIAS=%ALIAS%:1::;</command>
+        <command>LST-ONT::DID=%DID%,FN=%FN%,SN=%SN%,PN=%PN%,ONTID=%ONTID%:1::;</command>
+    </getConfig>
+    <getUpstream>
+        <command>LST-ONTPORT::DID=%DID%,FN=%FN%,SN=%SN%,PN=%PN%,ONTID=%ONTID%:2::;</command>
+        <command enrichdata="ONTPORTTYPE=ETH">LST-ONTPORTDETAIL::DID=%DID%,FN=%FN%,SN=%SN%,PN=%PN%,ONTID=%ONTID%,ONTPORTTYPE=%ONTPORTTYPE%,ONTPORTID=%ONTPORTID%:1::;</command>
+        <command>LST-ONTDBAPROF::DID=%DID%,FN=%FN%,SN=%SN%,PN=%PN%,ONTID=%ONTID%:1::;</command>
+    </getUpstream>
+    <setSIP>
+        <command>CFG-ONTVAINDIV::DID=%DID%,FN=%FN%,SN=%SN%,PN=%PN%,ONTID=%ONTID%,SIPUSERPWD_%SIPINDEX%=%SIPPWD%:1::;</command>
+    </setSIP>
+</operations>

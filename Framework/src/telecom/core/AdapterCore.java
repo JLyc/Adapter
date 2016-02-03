@@ -13,12 +13,12 @@ import java.util.List;
 
 /**
  * Created by JLyc on 26. 3. 2015.
- * @author andrej.socha@cgi.com
  *
- * Main class for Custom Adapter
+ * @author andrej.socha@cgi.com
+ *         <p>
+ *         Main class for Custom Adapter
  */
-public class AdapterCore
-{
+public class AdapterCore {
     private static final Log LOG = LogFactory.getLog(AdapterCore.class);
     // default prams
     private static LogLvl loglvl = LogLvl.CRTITICAL;
@@ -33,6 +33,7 @@ public class AdapterCore
 
     /**
      * resolveArgs handle start up input parameters and save them to configuration properties
+     *
      * @param args java main input parameters
      */
     private static void resolveArgs(String[] args) {
@@ -40,12 +41,12 @@ public class AdapterCore
         Configuration cfg = Configuration.getInstance();
 
         LOG.debug("Resolving given parameters");
-        if(params.size() == 1 && params.get(0).equalsIgnoreCase("?")){
+        if (params.size() == 1 && params.get(0).equalsIgnoreCase("?")) {
             usage();
             shutDown(1700);
         }
 
-        if(params.size()%2 != 0){
+        if (params.size() % 2 != 0) {
             LOG.warn("Illegal params see \"java -jar CustomAdapter.jar ? \" for usage \n You used [" + params + "}\nAdapter ignore your prams and use default");
             usage();
             cfg.loadConfig(dConfig);
@@ -54,12 +55,9 @@ public class AdapterCore
 
         if (params.contains("-loglvl")) {
             String _value = params.get(params.indexOf("-loglvl") + 1);
-            if(_value.equalsIgnoreCase(LogLvl.INFO.getName()))
-                loglvl = LogLvl.INFO;
-            if(_value.equalsIgnoreCase(LogLvl.WARN.getName()))
-                loglvl = LogLvl.WARN;
-            if(_value.equalsIgnoreCase(LogLvl.CRTITICAL.getName()))
-                loglvl = LogLvl.CRTITICAL;
+            if (_value.equalsIgnoreCase(LogLvl.INFO.getName())) loglvl = LogLvl.INFO;
+            if (_value.equalsIgnoreCase(LogLvl.WARN.getName())) loglvl = LogLvl.WARN;
+            if (_value.equalsIgnoreCase(LogLvl.CRTITICAL.getName())) loglvl = LogLvl.CRTITICAL;
         }
 
         if (params.contains("-config")) {
@@ -72,14 +70,10 @@ public class AdapterCore
 
         if (params.contains("-msgType")) {
             String _value = params.get(params.indexOf("-msgType") + 1);
-            if(_value.toLowerCase().contains("jms"))
-                cfg.getCommunicationType().setJms(true);
-            else
-                cfg.getCommunicationType().setJms(false);
-            if( _value.toLowerCase().contains("rv"))
-                cfg.getCommunicationType().setRv(true);
-            else
-                cfg.getCommunicationType().setRv(false);
+            if (_value.toLowerCase().contains("jms")) cfg.getCommunicationType().setJms(true);
+            else cfg.getCommunicationType().setJms(false);
+            if (_value.toLowerCase().contains("rv")) cfg.getCommunicationType().setRv(true);
+            else cfg.getCommunicationType().setRv(false);
         }
 
         if (params.contains("-threads")) {
@@ -98,6 +92,7 @@ public class AdapterCore
     private static void init() {
         Runtime.getRuntime().addShutdownHook(new ShutDown());
         communicationClient = CommunicationClient.getInstance();
+        LOG.debug("Starting listeners...");
         communicationClient.startListening();
     }
 
@@ -108,32 +103,35 @@ public class AdapterCore
      * 1702 - Problem with configuration file binding, adapter unable to run without configuration properties.
      * 1703 - Problem with RV communication. Adapter closed no communication available.
      * 1704 - Problem with JMS communication. Adapter closed no communication available.
-     *
      */
-    public static void shutDown(int code){
-        LOG.warn("Adapter closed with code: {"+code+"}. See documentation for more info.");
+    public static void shutDown(int code) {
+        LOG.warn("Adapter closing with code: {" + code + "}. See documentation for more info.");
         System.exit(code);
     }
 
     /**
      * ShutDown hook class for closing adapter
      */
-    private static class ShutDown extends Thread{
+    private static class ShutDown extends Thread {
         @Override
         public void run() {
             super.run();
-            LOG.info("Adapter shutting down");
-            communicationClient.stopListening();
-            communicationClient.shutDownExecutor();
+            LOG.info("Adapter shutting down...");
+            if (CommunicationClient.isListening()) {
+                LOG.debug("Finishing listening thread");
+                communicationClient.stopListening();
+                LOG.debug("Closing executor");
+                communicationClient.shutDownExecutor();
+            }
             LOG.info("Wait for request to be completed ...");
-            shutDown(1700);
+            LOG.debug("Adapter Closed");
         }
     }
 
     /**
      * Terminal output (manual like) message
      */
-    private static void usage(){
+    private static void usage() {
         System.out.print("\nUsage:");
         System.out.println("  \"java -jar CustomAdapter.jar [-loglvl lvl][-config config] [-msgType msgType] [-Threads threads] [-subject subject]\". \n");
         System.out.println(" -config config     Optional argument specifying location of external config");

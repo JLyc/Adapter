@@ -11,48 +11,63 @@
         <con:queueFactory>QueueConnectionFactory</con:queueFactory>
         <con:topicFactory>TopicConnectionFactory</con:topicFactory>
         <!--Optional:-->
-        <con:login>cadapter</con:login>
+        <con:login></con:login>
         <!--Optional:-->
-        <con:password>cadapter</con:password>
+        <con:password></con:password>
         <con:url>tcp://localhost:7222</con:url>
         <!--Optional:-->
-        <con:jndi_login>cadapter</con:jndi_login>
+        <con:jndi_login></con:jndi_login>
         <!--Optional:-->
-        <con:jndi_password>cadapter</con:jndi_password>
+        <con:jndi_password></con:jndi_password>
     </con:jms-descriptor>
     <!--Optional:-->
     <con:tibrv-descriptor>
         <!--Optional:-->
-        <con:service>7500</con:service>
+        <con:service>7541</con:service>
+        <!--<con:service>7500</con:service>-->
         <!--Optional:-->
-        <con:daemon>tcp:7500</con:daemon>
+        <con:daemon>tcp:7541</con:daemon>
+        <!--<con:daemon>tcp:7500</con:daemon>-->
     </con:tibrv-descriptor>
     <!--Optional:-->
     <con:tibhawkrv-descriptor>
         <con:monitor-enabled>true</con:monitor-enabled>
         <!--Optional:-->
-        <con:service>7474</con:service>
+        <con:service>7445</con:service>
         <!--Optional:-->
-        <con:daemon>tcp:7474</con:daemon>
-        <con:micro-agent-name>WeatherProbes</con:micro-agent-name>
+        <con:daemon>tcp:7445</con:daemon>
+        <con:micro-agent-name>WeatherProbe_Adapter</con:micro-agent-name>
+        <!--<con:micro-agent-name>U2000_Adapter</con:micro-agent-name>-->
     </con:tibhawkrv-descriptor>
     <!--Optional:-->
     <con:subject-descriptor>
-        <con:subject>customAdapter</con:subject>
+        <!--<con:subject>TMSK.DEV.CRM.CMN.U2000.ADAPTER.SUBSCRIBER</con:subject>-->
+        <con:subject>TMSK.DEV.CRM.CMN.WPROBE.ADAPTER.SUBSCRIBER</con:subject>
     </con:subject-descriptor>
     <!--Optional:-->
     <con:threads-descriptor>
         <con:threadsNo>0</con:threadsNo>
     </con:threads-descriptor>
     <con:plugin-def-prop>
-        system=WheatherProbes
-        snmp-version=1
-        ip-address=127.0.0.1
-        port=161
-        community=Public
-        request-type=GET
-        oid-name=getStatus
-        retries-count=2
-        timeout=100
+        system=>com.cgi.eai.adapter.custom.telecom.plugin.SNMP.WeatherProbes
+        snmp-version=>1
+        ip-address=>10.180.13.131
+        port=>161
+        community=>public
+        oid-max=>255
+        oiddepth=>4
+        request-type=>WALK
+        oid-name=>getStatus
+        retries-count=>2
+        timeout=>100
+        <!--system=>com.cgi.eai.adapter.custom.telecom.plugin.u2000.U2000-->
+        <!--&lt;!&ndash;ip-address=>localhost&ndash;&gt;-->
+        <!--ip-address=>10.176.13.10-->
+        <!--&lt;!&ndash;port=>1112&ndash;&gt;-->
+        <!--port=>9819-->
+        <!--user-name=>#!5AsQrh90x7GOkwyaAJrgor/RSFdAgfpghLnq3DQeewY=-->
+        <!--user-pwd=>#!DGtwPAzMD9C3k/O9WXE6vVDetHQXpjjbgNdzcZvriT0=-->
+        <!--retries-count=>2-->
+        <!--timeout=>100-->
     </con:plugin-def-prop>
 </con:custom-adapter-config>

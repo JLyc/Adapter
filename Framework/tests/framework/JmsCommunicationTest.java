@@ -20,7 +20,7 @@ public class JmsCommunicationTest {
     }
 
     @Test
-    public void jmsTest() {
+    public void jmsTest() throws InterruptedException {
         JmsCommunication jms = new JmsCommunication(null);
         jms.init();
         Thread jmsListening = new Thread(jms);
@@ -28,6 +28,7 @@ public class JmsCommunicationTest {
         assertTrue("jms is not listening", jmsListening.isAlive());
         jms.stopListening();
         assertTrue("jms is still listening", jmsListening.isAlive());
+        Thread.sleep(5000);
     }
 
 }

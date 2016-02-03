@@ -1,0 +1,11 @@
+<snmp-request-message>
+          <alias>48575443EBFAA923</alias>
+          <operation>getStatus</operation>
+        </snmp-request-message>
+
+<tl1-request-message>
+<alias>48575443EBFAA923</alias>
+<operation>setSIP</operation>
+<sipindex>1</sipindex>
+<sippwd>1231231</sippwd>
+</tl1-request-message>

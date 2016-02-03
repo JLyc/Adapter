@@ -1,6 +1,8 @@
 package telecom.core;
 
-import java.lang.Exception;import java.lang.String;import java.util.Map;
+import org.w3c.dom.*;
+
+import java.util.*;
 
 /**
  * Created by JLyc on 27. 3. 2015.
@@ -13,5 +15,5 @@ public interface CustomAdapterInterface {
      * @return response Map object
      * @throws Exception in case of fail message response
      */
-    public Map<String, String> request(Map<String, String> att) throws Exception;
+    public Document request(Map<String, String> att) throws Exception;
 }

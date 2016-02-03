@@ -19,8 +19,10 @@ import javax.jms.JMSException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import java.io.IOException;
-import java.io.StringReader;
+import javax.xml.transform.*;
+import javax.xml.transform.dom.*;
+import javax.xml.transform.stream.*;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,10 +38,11 @@ public class MessageLifeCycle implements Runnable {
         Map<String, String> msgAttributes = new HashMap<>();
         for (String line : Configuration.getInstance().getPluginDefProp().split("\n"))
         {
-            String[] nameValuePar = line.split("=");
+            String[] nameValuePar = line.split("=>");
             if(nameValuePar.length==2)
-                msgAttributes.put(nameValuePar[0].trim(), nameValuePar[1].trim());
+                msgAttributes.put(nameValuePar[0].trim().toUpperCase(), nameValuePar[1].trim());
         }
+        LOG.debug("Default attributes loaded");
         return msgAttributes;
     }
 
@@ -61,18 +64,22 @@ public class MessageLifeCycle implements Runnable {
         CommunicationMessageInterface response=null;
         try {
             Map<String, String> msgAttributes = getMsgAttributes(msg.getText());
-            Class<?> clazz = Class.forName("plugins." + msgAttributes.get("system"));
+            Class<?> clazz = Class.forName(msgAttributes.get("SYSTEM"));
             CustomAdapterInterface ec = (CustomAdapterInterface) clazz.newInstance();
-            Map<String, String> protocolResponse = ec.request(msgAttributes);
-            response = createResponse(protocolResponse);
+            Document protocolResponse = ec.request(msgAttributes);
+            response = createResponseFromDoc(protocolResponse);
 
         } catch (Exception e) {
             LOG.error("Error at message thread", e);
-            response = createMsg(("<body>\n\t<fail>" + e.getMessage() + "</fail>\n</body>"));
+            try {
+                response = createMsg(("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><snmp-response-message ip=\""+ getMsgAttributes("ip-address") +">\n\t<error>" + e.getMessage() + "</error>\n</snmp-response-message>"));
+            } catch (IOException | SAXException | ParserConfigurationException e1) {
+                e1.printStackTrace();
+            }
         }finally{
             CommunicationClient.getInstance().response(msg, response);
             long endTime = System.currentTimeMillis() - startTime;
-            AdapterStatistic.increaseValue("ProcessingSumTime", endTime);
+            AdapterStatistic.increaseTime("ProcessingSumTime", endTime);
         }
     }
 
@@ -86,13 +93,12 @@ public class MessageLifeCycle implements Runnable {
      * @throws ParserConfigurationException throw up to create fail message
      */
     private Map<String,String> getMsgAttributes(String xmlString) throws IOException, SAXException, ParserConfigurationException {
-        Map<String, String> msgAttributes = defaultAttributes;
+        Map<String, String> msgAttributes = new HashMap<>(defaultAttributes);
         NodeList xmlAttributes = getXmlNodes(xmlString);
-
         for (int index = 0; index < xmlAttributes.getLength(); index++) {
             Node element = xmlAttributes.item(index);
             if (element.getNodeType() == Node.ELEMENT_NODE) {
-                msgAttributes.put(element.getNodeName().replaceFirst(".*:", ""), xmlAttributes.item(index).getTextContent());
+                msgAttributes.put(element.getNodeName().replaceFirst(".*:", "").toUpperCase(), xmlAttributes.item(index).getTextContent());
             }
         }
         return msgAttributes;
@@ -111,6 +117,7 @@ public class MessageLifeCycle implements Runnable {
             }
     }
 
+    @Deprecated
     private CommunicationMessageInterface createResponse(Map<String, String> respond) {
         StringBuilder responseXml = new StringBuilder("<body>\n\t<success>\n");
         for (Map.Entry<String, String> entry : respond.entrySet()) {
@@ -119,6 +126,24 @@ public class MessageLifeCycle implements Runnable {
         responseXml.append("\t</success>\n</body>");
 
         return createMsg(responseXml.toString());
+    }
+
+    private CommunicationMessageInterface createResponseFromDoc(Document doc) {
+        try {
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            DOMSource source = new DOMSource(doc);
+
+            StringWriter writer = new StringWriter();
+            StreamResult result = new StreamResult(writer);
+            transformer.transform(source, result);
+            return createMsg(writer.toString());
+        } catch (TransformerConfigurationException e) {
+            e.printStackTrace();
+        } catch (TransformerException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     private CommunicationMessageInterface createMsg(String responseXml){

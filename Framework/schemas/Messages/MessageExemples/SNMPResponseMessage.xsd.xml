@@ -1,8 +1,8 @@
 <con:snmp-response-message xmlns:con="http://www.cgi.com/eai/adapter/custom/telecom/config">
   <!--You have a CHOICE of the next 2 items at this level-->
   <!--<con:fail>-->
-    <!--&lt;!&ndash;1 or more repetitions:&ndash;&gt;-->
-    <!--<con:error>string</con:error>-->
+  <!--&lt;!&ndash;1 or more repetitions:&ndash;&gt;-->
+  <!--<con:error>string</con:error>-->
   <!--</con:fail>-->
   <con:success>
     <!--You may enter ANY elements at this point-->

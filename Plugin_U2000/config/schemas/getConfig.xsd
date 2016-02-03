@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="tl1-response-message" type="tl1-response-messageType"/>
+
+    <xs:complexType name="getConfigType">
+        <xs:sequence>
+            <xs:element type="groupType" name="group"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="tl1-response-messageType">
+        <xs:sequence>
+            <xs:element type="statusType" name="status"/>
+            <xs:element type="getConfigType" name="getConfig"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="statusType">
+        <xs:sequence>
+            <xs:element type="xs:string" name="result"/>
+            <xs:element type="xs:string" name="description"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="groupType">
+        <xs:sequence>
+            <xs:element type="xs:string" name="DID"/>
+            <xs:element type="xs:string" name="ONTID"/>
+            <xs:element type="xs:string" name="FN"/>
+            <xs:element type="xs:string" name="PN"/>
+            <xs:element type="xs:string" name="SN"/>
+            <xs:element type="xs:string" name="ALIAS"/>
+            <xs:element type="xs:string" name="ALMPROF"/>
+            <xs:element type="xs:string" name="AUTH"/>
+            <xs:element type="xs:string" name="AUTHTIMEOUT"/>
+            <xs:element type="xs:string" name="BATTERYSTAT"/>
+            <xs:element type="xs:string" name="CAPABPROF"/>
+            <xs:element type="xs:string" name="CFGSTAT"/>
+            <xs:element type="xs:string" name="CURMACCOUNT"/>
+            <xs:element type="xs:string" name="DBATYPE"/>
+            <xs:element type="xs:string" name="DISCSTAT"/>
+            <xs:element type="xs:string" name="EQUIPMENTID"/>
+            <xs:element type="xs:string" name="IGMPSNOOPING"/>
+            <xs:element type="xs:string" name="IGMPVLAN"/>
+            <xs:element type="xs:string" name="IGMPVLANTAGMODE"/>
+            <xs:element type="xs:string" name="LINEPROF"/>
+            <xs:element type="xs:string" name="LOOPINNER"/>
+            <xs:element type="xs:string" name="LOOPOUTER"/>
+            <xs:element type="xs:string" name="MACLEARN"/>
+            <xs:element type="xs:string" name="MAINSOFTVERSION"/>
+            <xs:element type="xs:string" name="MATCHSTAT"/>
+            <xs:element type="xs:string" name="MFORWARDMODE"/>
+            <xs:element type="xs:string" name="NAME"/>
+            <xs:element type="xs:string" name="ONTRANG"/>
+            <xs:element type="xs:string" name="ONTRANGING"/>
+            <xs:element type="xs:string" name="ONTSTAT"/>
+            <xs:element type="xs:string" name="ONTVER"/>
+            <xs:element type="xs:string" name="OPTICSRXPOWER"/>
+            <xs:element type="xs:string" name="OPTICSTXBIASCURR"/>
+            <xs:element type="xs:string" name="OPTICSTXPOWER"/>
+            <xs:element type="xs:string" name="OPTICSTXTEMP"/>
+            <xs:element type="xs:string" name="OPTICSTXVOL"/>
+            <xs:element type="xs:string" name="PRODUCTID"/>
+            <xs:element type="xs:string" name="PWD"/>
+            <xs:element type="xs:string" name="SERIALNUM"/>
+            <xs:element type="xs:string" name="SERVPROF"/>
+            <xs:element type="xs:string" name="SRVPROF"/>
+            <xs:element type="xs:string" name="STANDBYSOFTVER"/>
+            <xs:element type="xs:string" name="TRANSPARENT"/>
+            <xs:element type="xs:string" name="UV"/>
+            <xs:element type="xs:string" name="VAPROF"/>
+            <xs:element type="xs:string" name="VENDORID"/>
+        </xs:sequence>
+    </xs:complexType>
+
+</xs:schema>

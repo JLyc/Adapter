@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="tibrvj64">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/Framework/libs/tibrvj64.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -6,6 +6,7 @@ import javax.jms.Message;
 import javax.jms.MessageConsumer;
 import javax.jms.MessageListener;
 
+import com.logica.eai.test.bw.jms.JmsMessage;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -20,7 +21,7 @@ import com.logica.eai.test.bw.jms.JmsType;
  * 
  * @author peter.kalinak
  */
-public class JmsRecorder extends MessageRecorder<JmsMessageInterfaceWraper> implements MessageListener
+public class JmsRecorder extends MessageRecorder<JmsMessage> implements MessageListener
 {
     /**
      * Logger for this class.
@@ -157,7 +158,7 @@ public class JmsRecorder extends MessageRecorder<JmsMessageInterfaceWraper> impl
             // acknowledge msg
             synchronized (lockObject)
             {
-                JmsMessageInterfaceWraper message = new JmsMessageInterfaceWraper(msg);
+                JmsMessage message = new JmsMessageInterfaceWraper(msg);
                 logMessage(message, destinationName);
                 storeMsg(message);
                 msg.acknowledge();

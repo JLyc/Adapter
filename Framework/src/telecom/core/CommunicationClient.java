@@ -1,20 +1,14 @@
 package telecom.core;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import telecom.config.Configuration;
-import telecom.core.wrapers.CommunicationInterface;
-import telecom.core.wrapers.CommunicationMessageInterface;
-import telecom.core.wrapers.jms.JmsCommunication;
-import telecom.core.wrapers.jms.JmsMessageInterfaceWraper;
-import telecom.core.wrapers.rv.RVMessageInterfaceWraper;
-import telecom.core.wrapers.rv.RvCommunication;
-import telecom.hawk.HawkMonitor;
-import telecom.statistic.AdapterStatistic;
+import org.apache.commons.logging.*;
+import telecom.config.*;
+import telecom.core.wrapers.*;
+import telecom.core.wrapers.jms.*;
+import telecom.core.wrapers.rv.*;
+import telecom.hawk.*;
+import telecom.statistic.*;
 
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 /**
  * Created by JLyc on 26. 3. 2015.
@@ -25,21 +19,23 @@ import java.util.concurrent.TimeUnit;
 public class CommunicationClient implements CommunicationClientInterface {
     private static final Log LOG = LogFactory.getLog(CommunicationClient.class);
     private static CommunicationClient communicationClient = null;
+
+    private static boolean isListening = false;
+
     // Threads pool
     private static ThreadPoolExecutor executor = null;
+
     // Configuration instance
     private static Configuration cfg = Configuration.getInstance();
-
     CommunicationInterface rvListener;
     CommunicationInterface jmsListener;
-    HawkMonitor hawkMonitor;
 
+    HawkMonitor hawkMonitor;
     public static CommunicationClient getInstance() {
         if (communicationClient == null)
         	communicationClient = new CommunicationClient();
         return communicationClient;
     }
-
     private CommunicationClient() {
             init();
     }
@@ -49,9 +45,11 @@ public class CommunicationClient implements CommunicationClientInterface {
 
         if (cfg.isRv()) {
             rvListener = new RvCommunication(this);
+            rvListener.init();
         }
         if (cfg.isJms()) {
             jmsListener = new JmsCommunication(this);
+            jmsListener.init();
         }
         if (cfg.isHawkEnabled()){
             hawkMonitor = new HawkMonitor();
@@ -81,7 +79,7 @@ public class CommunicationClient implements CommunicationClientInterface {
             }
             executor.awaitTermination(1000, TimeUnit.MILLISECONDS);
         } catch (InterruptedException e) {
-            LOG.info("Executor closed with "+executor.getQueue().size()+"tasks at queues and "  +executor.getActiveCount()+" Active tasks: ");
+            LOG.info("Executor closed with: "+executor.getQueue().size()+" tasks at queues and "  +executor.getActiveCount()+" active tasks.");
         }
     }
 
@@ -92,8 +90,9 @@ public class CommunicationClient implements CommunicationClientInterface {
      * @param msg Rv or Jms message
      */
     public synchronized void request(CommunicationMessageInterface msg){
-        executor.execute(new MessageLifeCycle(msg));
+        LOG.debug("Executing msg "+msg);
         AdapterStatistic.increaseValue("MsgCount", 1);
+        executor.execute(new MessageLifeCycle(msg));
     }
 
     /**
@@ -104,11 +103,14 @@ public class CommunicationClient implements CommunicationClientInterface {
      * @param responseMsg response message Rv or Jms
      */
     public synchronized void response(CommunicationMessageInterface sourceMsg, CommunicationMessageInterface responseMsg){
+        LOG.debug("Response "+responseMsg.getText());
             if (responseMsg instanceof RVMessageInterfaceWraper) {
                 rvListener.sendReply(responseMsg, sourceMsg);
             }
             if (responseMsg instanceof JmsMessageInterfaceWraper) {
-                jmsListener.sendReply(responseMsg, sourceMsg);
+//                Destination destination = (JmsMessageInterfaceWraper) sourceMsg.getMessage().getJMSReplyTo();
+//                jmsListener.sendReply(responseMsg, sourceMsg);
+                jmsListener.send((JmsMessageInterfaceWraper) responseMsg, Configuration.getInstance().getSubjectDescriptor().getSubject());
             }
     }
 
@@ -125,6 +127,8 @@ public class CommunicationClient implements CommunicationClientInterface {
         if(hawkMonitor != null){
             new Thread(hawkMonitor).start();
         }
+        LOG.info("Running listeners: RV="+rvListener+", JMS="+jmsListener+", HawkMonitor="+hawkMonitor);
+        isListening = true;
     }
 
     /**
@@ -143,6 +147,18 @@ public class CommunicationClient implements CommunicationClientInterface {
             hawkMonitor.stopListening();
             hawkMonitor.close();
         }
+        isListening = false;
+    }
+
+    /**
+     * Is listening thread active
+     */
+    public static boolean isListening() {
+        return isListening;
+    }
+
+    public static ThreadPoolExecutor getExecutor() {
+        return executor;
     }
 
 }

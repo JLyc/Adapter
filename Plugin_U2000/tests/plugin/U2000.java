@@ -1,11 +1,14 @@
 package plugin;
 
-import org.junit.Before;
-import org.junit.Test;
-import telecom.core.CustomAdapterInterface;
+import org.junit.*;
+import org.w3c.dom.*;
+import telecom.core.*;
 
-import java.util.HashMap;
-import java.util.Map;
+import javax.xml.transform.*;
+import javax.xml.transform.dom.*;
+import javax.xml.transform.stream.*;
+import java.io.*;
+import java.util.*;
 
 /**
  * Created by CGIusr on 11/9/15.
@@ -27,32 +30,56 @@ public class U2000 {
 
     @Before
     public void prepareRequest() {
-        requestObject.put("system", "U2000");
-        requestObject.put("ip-address","localhost" );
+        requestObject.put("SYSTEM", "U2000");
+        requestObject.put("IP-ADDRESS", "localhost");
 //        requestObject.put("ip-address","10.176.13.10" );
-        requestObject.put("port","1111" );
+        requestObject.put("PORT", "1112");
 //        requestObject.put("port","9819" );
-        requestObject.put("user-name","#!5AsQrh90x7GOkwyaAJrgor/RSFdAgfpghLnq3DQeewY=" );
-        requestObject.put("user-pwd","#!DGtwPAzMD9C3k/O9WXE6vVDetHQXpjjbgNdzcZvriT0=" );
-        requestObject.put("retries-count","2" );
-        requestObject.put("timeout","100" );
-//        requestObject.put("")
+        requestObject.put("USER-NAME", "#!5AsQrh90x7GOkwyaAJrgor/RSFdAgfpghLnq3DQeewY=");
+        requestObject.put("USER-PWD", "#!DGtwPAzMD9C3k/O9WXE6vVDetHQXpjjbgNdzcZvriT0=");
+        requestObject.put("RETRIES-COUNT", "2");
+        requestObject.put("TIMEOUT", "100");
+
+        requestObject.put("ALIAS", "48575443EBFAA923");
+//        requestObject.put("ALIAS","48575443237A5329");
+//        requestObject.put("ALIAS","32303131E487BA41");
+        requestObject.put("OPERATION","getStatus");
+        requestObject.put("OPERATION","setSIP");
+        requestObject.put("SIPINDEX","1");
+        requestObject.put("SIPPWD","1234");
+//        requestObject.put("operation", "getConfig");
+//        requestObject.put("operation", "getUpstream");
+
     }
 
     @Test
     public void requestTest() throws ClassNotFoundException, IllegalAccessException, InstantiationException {
-        java.lang.Class<CustomAdapterInterface> clazz = (Class<CustomAdapterInterface>) Class.forName("com.cgi.eai.adapter.custom.telecom.plugin.u2000.U2000");
-        CustomAdapterInterface ec = clazz.newInstance();
-        Map<String, String> response = null;
-//        Logger root = Logger.getRootLogger();
-//        root.setLevel(Level.DEBUG);
-        try {
-            response = ec.request(requestObject);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        for(Map.Entry<String,String> res : response.entrySet()){
-            System.out.println(res.getKey()+" : "+res.getValue());
+        for (int index = 0; index <= 0; index++) {
+            java.lang.Class<CustomAdapterInterface> clazz = (Class<CustomAdapterInterface>) Class.forName("com.cgi.eai.adapter.custom.telecom.plugin.u2000.U2000");
+            CustomAdapterInterface ec = clazz.newInstance();
+            Document response = null;
+            try {
+                response = ec.request(requestObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+            try {
+                TransformerFactory transformerFactory = TransformerFactory.newInstance();
+                Transformer transformer = transformerFactory.newTransformer();
+
+                DOMSource source = new DOMSource(response);
+
+                StringWriter writer = new StringWriter();
+                StreamResult result = new StreamResult(writer);
+                transformer.transform(source, result);
+                System.out.println(writer.toString());
+            } catch (TransformerConfigurationException e) {
+                e.printStackTrace();
+            } catch (TransformerException e) {
+                e.printStackTrace();
+            }
         }
     }
 

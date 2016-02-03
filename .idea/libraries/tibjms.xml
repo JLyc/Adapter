@@ -2,6 +2,7 @@
   <library name="tibjms">
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/Framework/libs/jms.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Framework/libs/tibjms.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

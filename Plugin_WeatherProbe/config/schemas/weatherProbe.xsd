@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="snmp-response-message" type="snmp-response-messageType"/>
+    <xs:complexType name="snmp-response-messageType">
+        <xs:sequence>
+            <xs:element type="statusType" name="status"/>
+            <xs:element type="weatherProbeType" name="weatherProbe"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="statusType">
+        <xs:sequence>
+            <xs:element type="xs:string" name="result"/>
+            <xs:element type="xs:string" name="description"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="weatherProbeType">
+        <xs:sequence>
+            <xs:element type="xs:string" name="signalStandard"/>
+            <xs:element type="xs:string" name="signalFrameRate"/>
+            <xs:element type="xs:string" name="rfLevel"/>
+            <xs:element type="xs:string" name="inputIndex"/>
+            <xs:element type="xs:string" name="modulationErrorRatio"/>
+            <xs:element type="xs:string" name="ToneFlag22khz"/>
+            <xs:element type="xs:string" name="bitErrorRate"/>
+            <xs:element type="xs:string" name="signalModulationType"/>
+            <xs:element type="xs:string" name="inputSignalStatus"/>
+            <xs:element type="xs:string" name="streamBitrate"/>
+            <xs:element type="xs:string" name="supplyVoltage"/>
+            <xs:element type="xs:string" name="networkTransmitChannelIndex"/>
+            <xs:element type="xs:string" name="physicalPortNumber"/>
+            <xs:element type="xs:string" name="signalOfNoiseRatio"/>
+            <xs:element type="xs:string" name="signalPunctureRate"/>
+            <xs:element type="xs:string" name="streamSymbolRate"/>
+            <xs:element type="xs:string" name="carrierFrequency"/>
+        </xs:sequence>
+        <xs:attribute type="xs:string" name="ip"/>
+    </xs:complexType>
+</xs:schema>

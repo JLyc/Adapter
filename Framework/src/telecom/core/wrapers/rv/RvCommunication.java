@@ -9,6 +9,7 @@ import telecom.core.AdapterCore;
 import telecom.core.CommunicationClientInterface;
 import telecom.core.wrapers.CommunicationInterface;
 import telecom.core.wrapers.CommunicationMessageInterface;
+import telecom.core.wrapers.jms.JmsMessageInterfaceWraper;
 
 /**
  * Created by JLyc on 9. 4. 2015.
@@ -35,17 +36,22 @@ public class RvCommunication implements CommunicationInterface, TibrvMsgCallback
     public void init() {
         LOG.info("Initializing RV connection...");
         try {
+            System.loadLibrary("tibrvj64");
+//            System.loadLibrary("tibrvj");
             Tibrv.open(Tibrv.IMPL_NATIVE);
+            System.out.println(tibRvDescriptor.getService());
+            System.out.println(tibRvDescriptor.getNetwork());
+            System.out.println(tibRvDescriptor.getDaemon());
             rvdTransport = new TibrvRvdTransport(tibRvDescriptor.getService(),
                     tibRvDescriptor.getNetwork(), tibRvDescriptor.getDaemon());
             if (rvdTransport == null) {
                 LOG.error("RV transport is not initialized!");
-                AdapterCore.shutDown(173);
+                AdapterCore.shutDown(1703);
             }
             rvQueue = new TibrvQueue();
             tibrvListener = new TibrvListener(rvQueue, this, rvdTransport, cfg.getSubjectDescriptor().getSubject(),null);
             LOG.info("RV Listening on subject: " + cfg.getSubjectDescriptor().getSubject());
-        } catch (TibrvException e) {
+        } catch (Exception | UnsatisfiedLinkError e) {
             LOG.error("RV failed to initialize", e);
             AdapterCore.shutDown(173);
         }
@@ -76,6 +82,11 @@ public class RvCommunication implements CommunicationInterface, TibrvMsgCallback
         } catch (TibrvException e) {
             LOG.error("Failed to send response" + responseMsg.getText(), e);
         }
+    }
+
+    @Override
+    public void send(JmsMessageInterfaceWraper replyMsg, String destination) {
+
     }
 
     @Override

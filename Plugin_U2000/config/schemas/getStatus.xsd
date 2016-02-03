@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="tl1-response-message" type="tl1-response-messageType"/>
+
+    <xs:complexType name="tl1-response-messageType">
+        <xs:sequence>
+            <xs:element type="statusType" name="status"/>
+            <xs:element type="getStatusType" name="getStatus"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="statusType">
+        <xs:sequence>
+            <xs:element type="xs:string" name="result"/>
+            <xs:element type="xs:string" name="description"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="getStatusType">
+        <xs:sequence>
+            <xs:element type="groupType" name="group"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="groupType">
+        <xs:all>
+            <xs:element type="xs:string" name="DID"/>
+            <xs:element type="xs:string" name="SN"/>
+            <xs:element type="xs:string" name="FN"/>
+            <xs:element type="xs:string" name="PN"/>
+            <xs:element type="xs:string" name="ONTID"/>
+            <xs:element type="xs:string" name="ALIAS"/>
+            <xs:element type="xs:string" name="ADMINSTAT"/>
+            <xs:element type="xs:string" name="BATTERYSTAT"/>
+            <xs:element type="xs:string" name="LSTDOWNCAUSE"/>
+            <xs:element type="xs:string" name="LSTDOWNTIME"/>
+            <xs:element type="xs:string" name="LSTUPTIME"/>
+            <xs:element type="xs:string" name="NAME"/>
+            <xs:element type="xs:string" name="RUNSTAT"/>
+        </xs:all>
+    </xs:complexType>
+
+</xs:schema>
