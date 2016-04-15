@@ -40,14 +40,16 @@ public class U2000 {
         requestObject.put("RETRIES-COUNT", "2");
         requestObject.put("TIMEOUT", "100");
 
-        requestObject.put("ALIAS", "48575443EBFAA923");
+//        requestObject.put("ALIAS", "48575443EBFAA923");
+//        requestObject.put("ALIAS", "48575443B74D1302");
 //        requestObject.put("ALIAS","48575443237A5329");
 //        requestObject.put("ALIAS","32303131E487BA41");
-        requestObject.put("OPERATION","getStatus");
-        requestObject.put("OPERATION","setSIP");
-        requestObject.put("SIPINDEX","1");
-        requestObject.put("SIPPWD","1234");
-//        requestObject.put("operation", "getConfig");
+        requestObject.put("ALIAS","4857544394BE8F20");
+//        requestObject.put("OPERATION","getStatus");
+//        requestObject.put("OPERATION","setSIP");
+//        requestObject.put("SIPINDEX","1");
+//        requestObject.put("SIPPWD","1234");
+        requestObject.put("OPERATION", "getConfig");
 //        requestObject.put("operation", "getUpstream");
 
     }
@@ -65,21 +67,21 @@ public class U2000 {
             }
 
 
-            try {
-                TransformerFactory transformerFactory = TransformerFactory.newInstance();
-                Transformer transformer = transformerFactory.newTransformer();
-
-                DOMSource source = new DOMSource(response);
-
-                StringWriter writer = new StringWriter();
-                StreamResult result = new StreamResult(writer);
-                transformer.transform(source, result);
-                System.out.println(writer.toString());
-            } catch (TransformerConfigurationException e) {
-                e.printStackTrace();
-            } catch (TransformerException e) {
-                e.printStackTrace();
-            }
+//            try {
+//                TransformerFactory transformerFactory = TransformerFactory.newInstance();
+//                Transformer transformer = transformerFactory.newTransformer();
+//
+//                DOMSource source = new DOMSource(response);
+//
+//                StringWriter writer = new StringWriter();
+//                StreamResult result = new StreamResult(writer);
+//                transformer.transform(source, result);
+//                System.out.println(writer.toString());
+//            } catch (TransformerConfigurationException e) {
+//                e.printStackTrace();
+//            } catch (TransformerException e) {
+//                e.printStackTrace();
+//            }
         }
     }
 

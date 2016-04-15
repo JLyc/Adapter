@@ -5,7 +5,7 @@ import telecom.config.*;
 import telecom.core.wrapers.*;
 import telecom.core.wrapers.jms.*;
 import telecom.core.wrapers.rv.*;
-import telecom.hawk.*;
+import telecom.monitoring.*;
 import telecom.statistic.*;
 
 import java.util.concurrent.*;
@@ -29,17 +29,25 @@ public class CommunicationClient implements CommunicationClientInterface {
     private static Configuration cfg = Configuration.getInstance();
     CommunicationInterface rvListener;
     CommunicationInterface jmsListener;
-
     HawkMonitor hawkMonitor;
+
+    /**
+     * Return singleton instance of CommunicationClient
+     * @return
+     */
     public static CommunicationClient getInstance() {
         if (communicationClient == null)
         	communicationClient = new CommunicationClient();
         return communicationClient;
     }
+
     private CommunicationClient() {
             init();
     }
 
+    /**
+     * Initialize all enabled communication ways in config file e.g. JMS, RV, HawkRv
+     */
     private void init(){
         initExecutor();
 
@@ -71,8 +79,7 @@ public class CommunicationClient implements CommunicationClientInterface {
 
     public void shutDownExecutor(){
         executor.shutdown();
-        LOG.info("Executor closing with "+executor.getQueue().size()+"tasks at queues and "  +executor.getActiveCount()+" active tasks: ");
-        //TODO change based on performance
+        LOG.info("Executor closing with: "+executor.getQueue().size()+" tasks at queues and "  +executor.getActiveCount()+" active tasks: ");
         try {
             while(!(executor.getQueue().size()==0&&executor.getActiveCount()==00)){
                 TimeUnit.SECONDS.sleep(1);
@@ -103,14 +110,12 @@ public class CommunicationClient implements CommunicationClientInterface {
      * @param responseMsg response message Rv or Jms
      */
     public synchronized void response(CommunicationMessageInterface sourceMsg, CommunicationMessageInterface responseMsg){
-        LOG.debug("Response "+responseMsg.getText());
+        LOG.debug("Response: "+responseMsg.getText());
             if (responseMsg instanceof RVMessageInterfaceWraper) {
                 rvListener.sendReply(responseMsg, sourceMsg);
             }
             if (responseMsg instanceof JmsMessageInterfaceWraper) {
-//                Destination destination = (JmsMessageInterfaceWraper) sourceMsg.getMessage().getJMSReplyTo();
-//                jmsListener.sendReply(responseMsg, sourceMsg);
-                jmsListener.send((JmsMessageInterfaceWraper) responseMsg, Configuration.getInstance().getSubjectDescriptor().getSubject());
+                jmsListener.sendReply(responseMsg, sourceMsg);
             }
     }
 
@@ -120,14 +125,17 @@ public class CommunicationClient implements CommunicationClientInterface {
     public void startListening(){
         if(rvListener !=null) {
             new Thread(rvListener).start();
+            LOG.info("is Rv listening -> " + ((Thread) rvListener).isAlive());
         }
         if(jmsListener != null){
             new Thread(jmsListener).start();
+            LOG.info("is Jms listening  -> " + ((Thread) jmsListener).isAlive());
         }
         if(hawkMonitor != null){
-            new Thread(hawkMonitor).start();
+            Thread _hawkMonitor = new Thread(hawkMonitor);
+            _hawkMonitor.start();
+            LOG.info("is HawkRv monitoring -> " + _hawkMonitor.isAlive());
         }
-        LOG.info("Running listeners: RV="+rvListener+", JMS="+jmsListener+", HawkMonitor="+hawkMonitor);
         isListening = true;
     }
 
@@ -135,6 +143,7 @@ public class CommunicationClient implements CommunicationClientInterface {
      * Stop listening for messages on initialized Listeners
      */
     public void stopListening(){
+        isListening = false;
         if(rvListener !=null) {
             rvListener.stopListening();
             rvListener.close();
@@ -147,7 +156,6 @@ public class CommunicationClient implements CommunicationClientInterface {
             hawkMonitor.stopListening();
             hawkMonitor.close();
         }
-        isListening = false;
     }
 
     /**
@@ -157,6 +165,10 @@ public class CommunicationClient implements CommunicationClientInterface {
         return isListening;
     }
 
+    /**
+     * Return thread pool
+     * @return
+     */
     public static ThreadPoolExecutor getExecutor() {
         return executor;
     }

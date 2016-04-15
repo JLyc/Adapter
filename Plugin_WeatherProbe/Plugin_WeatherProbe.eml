@@ -5,8 +5,8 @@
 	<contentEntry url="file://$MODULE_DIR$">
 		<testFolder url="file://$MODULE_DIR$/tests"/>
 	</contentEntry>
-	<module name="Framework" scope="TEST"/>
 	<levels>
 		<level name="snmp4j-2.3.3_wp" value="project"/>
+		<level name="logging" value="project"/>
 	</levels>
 </component>

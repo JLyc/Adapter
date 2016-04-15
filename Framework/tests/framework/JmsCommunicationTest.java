@@ -22,7 +22,6 @@ public class JmsCommunicationTest {
     @Test
     public void jmsTest() throws InterruptedException {
         JmsCommunication jms = new JmsCommunication(null);
-        jms.init();
         Thread jmsListening = new Thread(jms);
         jmsListening.start();
         assertTrue("jms is not listening", jmsListening.isAlive());

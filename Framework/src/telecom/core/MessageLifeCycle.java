@@ -34,6 +34,10 @@ public class MessageLifeCycle implements Runnable {
     private static final Log LOG = LogFactory.getLog(MessageLifeCycle.class);
     private static final Map<String, String> defaultAttributes = loadDefaultAttributes();
 
+    /**
+     * Load default attributes from config file
+     * @return
+     */
     private static Map<String, String> loadDefaultAttributes() {
         Map<String, String> msgAttributes = new HashMap<>();
         for (String line : Configuration.getInstance().getPluginDefProp().split("\n"))
@@ -71,11 +75,7 @@ public class MessageLifeCycle implements Runnable {
 
         } catch (Exception e) {
             LOG.error("Error at message thread", e);
-            try {
-                response = createMsg(("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><snmp-response-message ip=\""+ getMsgAttributes("ip-address") +">\n\t<error>" + e.getMessage() + "</error>\n</snmp-response-message>"));
-            } catch (IOException | SAXException | ParserConfigurationException e1) {
-                e1.printStackTrace();
-            }
+                response = createMsg(("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><response-message>\n\t<error>" + e.getMessage() + "</error>\n</response-message>"));
         }finally{
             CommunicationClient.getInstance().response(msg, response);
             long endTime = System.currentTimeMillis() - startTime;
@@ -104,6 +104,14 @@ public class MessageLifeCycle implements Runnable {
         return msgAttributes;
     }
 
+    /**
+     * Parse and get Nodes from xml
+     * @param xml to get Nodes from (config file)
+     * @return NodeList
+     * @throws ParserConfigurationException
+     * @throws IOException
+     * @throws SAXException
+     */
     private NodeList getXmlNodes(String xml) throws ParserConfigurationException, IOException, SAXException {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = factory.newDocumentBuilder();
@@ -117,17 +125,11 @@ public class MessageLifeCycle implements Runnable {
             }
     }
 
-    @Deprecated
-    private CommunicationMessageInterface createResponse(Map<String, String> respond) {
-        StringBuilder responseXml = new StringBuilder("<body>\n\t<success>\n");
-        for (Map.Entry<String, String> entry : respond.entrySet()) {
-            responseXml.append("\t\t\t<" + entry.getKey() + ">" + entry.getValue() + "</" + entry.getKey() + ">\n");
-        }
-        responseXml.append("\t</success>\n</body>");
-
-        return createMsg(responseXml.toString());
-    }
-
+    /**
+     * Construct response from xml Document object return by plugin.
+     * @param doc Document returned from plugin
+     * @return message in request message type
+     */
     private CommunicationMessageInterface createResponseFromDoc(Document doc) {
         try {
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
@@ -146,6 +148,11 @@ public class MessageLifeCycle implements Runnable {
         return null;
     }
 
+    /**
+     * Create message of corresponding type (JMS or RV) based on request message request type
+     * @param responseXml xml document to send as message
+     * @return message of request type
+     */
     private CommunicationMessageInterface createMsg(String responseXml){
         CommunicationMessageInterface responseMsg= null;
         try {

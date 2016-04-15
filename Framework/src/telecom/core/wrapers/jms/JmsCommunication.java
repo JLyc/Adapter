@@ -1,6 +1,8 @@
 package telecom.core.wrapers.jms;
 
 import com.cgi.eai.adapter.custom.telecom.config.JmsDescriptor;
+import com.logica.eai.test.bw.jms.JmsMessage;
+import com.logica.eai.test.bw.jms.JmsPropertyKey;
 import com.logica.eai.test.bw.jms.JmsType;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -10,10 +12,9 @@ import telecom.core.CommunicationClientInterface;
 import telecom.core.wrapers.CommunicationInterface;
 import telecom.core.wrapers.CommunicationMessageInterface;
 
-import javax.jms.Destination;
-import javax.jms.JMSException;
-import javax.jms.MessageProducer;
+import javax.jms.*;
 import javax.naming.NamingException;
+import java.util.Properties;
 
 /**
  * Created by JLyc on 9. 4. 2015.
@@ -60,39 +61,27 @@ public class JmsCommunication implements CommunicationInterface {
 
     @Override
     public void sendReply(CommunicationMessageInterface responseMsg, CommunicationMessageInterface sourceMsg) {
+        MessageProducer producer = null;
         try {
-            sendReply((JmsMessageInterfaceWraper) responseMsg, (JmsMessageInterfaceWraper) sourceMsg);
+            Destination destination = JmsFactory.getInstance().createDestination(Configuration.getInstance().getJmsResponseSubject().getResponseSubject(), JmsType.QUEUE);
+            producer = JmsFactory.getInstance().createProducer(destination);
+            Properties jmsProp = new Properties();
+            jmsProp.put(JmsPropertyKey.JMSCorrelationID,((JmsMessage) sourceMsg).getMessage().getJMSCorrelationID() );
+            producer.send((Message) new JmsMessage(responseMsg.getText(), jmsProp));
+//            producer.send(((JmsMessageInterfaceWraper) responseMsg).getMessage());
+            LOG.info("Reply sent to QUEUE " + destination);
         } catch (JMSException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    @Override
-    public void send(final JmsMessageInterfaceWraper replyMsg, String msg){
-//        Destination destination = msg.getMessage().getJMSReplyTo();
-//        LOG.warn(destination);
-//        if (destination != null) {
-            MessageProducer producer = null;
-            try {
-                Destination destination = JmsFactory.getInstance().createDestination("customAdapter.out", JmsType.QUEUE);
-                producer = JmsFactory.getInstance().createProducer(destination);
-                producer.send(replyMsg.getMessage());
-                LOG.info("Reply sent to QUEUE " + destination);
-            } catch (JMSException e) {
-                e.printStackTrace();
-            } finally {
-                if (producer != null) {
-                    try {
-                        producer.close();
-                    } catch (JMSException e) {
-                        e.printStackTrace();
-                    }
+            LOG.error("Unable reply on message", e);
+        } finally {
+            if (producer != null) {
+                try {
+                    producer.close();
+                } catch (JMSException e) {
+                    LOG.error("Error on closing reply produces", e);
                 }
             }
-//        } else {
-//            LOG.error("No destination to reply to...");
-//        }
+        }
+
     }
 
     @Override
@@ -101,34 +90,11 @@ public class JmsCommunication implements CommunicationInterface {
 
         while (isListening) {
             JmsMessageInterfaceWraper msg = (JmsMessageInterfaceWraper) jmsRecorder.getMsg(1);
-//            LOG.debug("listening ! ! !");
             if (msg != null) {
-                LOG.debug("sending message to executor ! ! !");
+                LOG.debug("Sending message to executor");
                 communicationClient.request(msg);
             }
         }
         LOG.info("JMS listener stopped");
     }
-
-    private void sendReply(final JmsMessageInterfaceWraper replyMsg, final JmsMessageInterfaceWraper msg)
-            throws JMSException {
-        Destination destination = msg.getMessage().getJMSReplyTo();
-        LOG.warn(destination);
-        if (destination != null) {
-            MessageProducer producer = null;
-            try {
-                producer = JmsFactory.getInstance().createProducer(destination);
-                producer.send(replyMsg.getMessage());
-                LOG.info("Reply sent to QUEUE " + destination);
-            } finally {
-                if (producer != null) {
-                    producer.close();
-                }
-            }
-        } else {
-            LOG.error("No destination to reply to...");
-        }
-    }
-
-
 }

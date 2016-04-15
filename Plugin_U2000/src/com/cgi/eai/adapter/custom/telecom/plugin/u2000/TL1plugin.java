@@ -32,6 +32,7 @@ public abstract class TL1plugin implements CustomAdapterInterface {
     private TelnetClient telnet;
     private InputStream in = null;
     private PrintStream out = null;
+    BufferedInputStream bin = null;
     private long timeout = 1000;
 
     private final Path COMMAND_LOCATION = FileSystems.getDefault().getPath("config" + FileSystems.getDefault().getSeparator() + "Commands.xml");
@@ -60,6 +61,7 @@ public abstract class TL1plugin implements CustomAdapterInterface {
             telnet = new TelnetClient();
             telnet.connect(att.get("IP-ADDRESS"), Integer.parseInt(att.get("PORT")));
             in = telnet.getInputStream();
+            bin = new BufferedInputStream(telnet.getInputStream());
             out = new PrintStream(telnet.getOutputStream());
 
             LOG.debug("Logging in...");
@@ -79,16 +81,17 @@ public abstract class TL1plugin implements CustomAdapterInterface {
                 enriching();
             }
 
-            LOG.debug("Logging out...");
-            tl1Logout();
-            disconnect();
-
             return createResponseObject(responseObject);
         } catch (Exception e) {
-            LOG.error(e);
+//            e.printStackTrace();
+            LOG.error(e.toString());
             resultCode = 1;
             descriptionText = e.getMessage();
             return createResponseObject(responseObject);
+        } finally{
+            LOG.debug("Logging out...");
+            tl1Logout();
+            disconnect();
         }
     }
 
@@ -128,8 +131,10 @@ public abstract class TL1plugin implements CustomAdapterInterface {
     }
 
     private void callCommand(String command) throws IOException {
-        write(constructDynamicCommandFromBaseForGroups(command, att, ""));
-        responseObject.putAll(readTL1SucceedResponse(readUntil()));
+        String cmd = constructDynamicCommandFromBaseForGroups(command, att, "");
+        write(cmd);
+        String succes = readUntil();
+        responseObject.putAll(readTL1SucceedResponse(succes));
     }
 
     private List<String> getOperation() {
@@ -171,7 +176,7 @@ public abstract class TL1plugin implements CustomAdapterInterface {
         String[] helpString = null;
         String[] name = null;
         String[] values = null;
-        Pattern pattern = Pattern.compile("-{9,}(.*)-{3}");
+        Pattern pattern = Pattern.compile("-{9,}(.*)-{5}");
         Matcher matcher = pattern.matcher(succeedMsg);
         if (matcher.find()) {
             helpString = matcher.group(1).trim().split("\\s\\s");
@@ -226,6 +231,29 @@ public abstract class TL1plugin implements CustomAdapterInterface {
     }
 
     public String readUntil() throws IOException {
+        StringBuilder sb = new StringBuilder();
+//        && !(sb.toString().matches(".+ENDESC.+"))
+        while (sb.toString().equals("") || !sb.toString().endsWith(";")){
+        while(bin.available()>0)
+        {
+            char c = (char)bin.read();
+//            if(c=='\n' || c=='\r')
+//            {
+//                continue;
+//            }
+            sb.append(c);
+        }}
+        String out = sb.toString().replace("\n", " ").replace("\r", " ");
+        System.out.println("****************************" + out + "****************************");
+        if (out.matches(".+ENDESC=Succeeded.+")||out.equals("")) {
+            return out;
+        } else {
+            throw new IOException("Called command failed do response with success: " + out);
+        }
+    }
+
+    @Deprecated
+    public String readUntilOld() throws IOException {
         long lastTime = System.currentTimeMillis();
         StringBuilder sb = new StringBuilder();
         while (true) {

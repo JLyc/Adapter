@@ -81,6 +81,10 @@ public class Configuration {
         return generatedConfig.getCommunicationType();
     }
 
+    public String getNativeLibDefinition(){
+        return generatedConfig.getNativeLibDefinition();
+    }
+
     public TibrvDescriptor getRvDescriptor()
     {
         return generatedConfig.getTibrvDescriptor();
@@ -89,6 +93,11 @@ public class Configuration {
     public JmsDescriptor getJmsDescriptor()
     {
         return generatedConfig.getJmsDescriptor();
+    }
+
+    public JmsResponseSubject getJmsResponseSubject()
+    {
+        return generatedConfig.getJmsResponseSubject();
     }
 
     public ThreadsDescriptor getThreadsDescriptor()

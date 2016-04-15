@@ -1,15 +1,11 @@
 package telecom.core.wrapers.rv;
 
-import com.cgi.eai.adapter.custom.telecom.config.TibrvDescriptor;
+import com.cgi.eai.adapter.custom.telecom.config.*;
 import com.tibco.tibrv.*;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import telecom.config.Configuration;
-import telecom.core.AdapterCore;
-import telecom.core.CommunicationClientInterface;
-import telecom.core.wrapers.CommunicationInterface;
-import telecom.core.wrapers.CommunicationMessageInterface;
-import telecom.core.wrapers.jms.JmsMessageInterfaceWraper;
+import org.apache.commons.logging.*;
+import telecom.config.*;
+import telecom.core.*;
+import telecom.core.wrapers.*;
 
 /**
  * Created by JLyc on 9. 4. 2015.
@@ -36,12 +32,7 @@ public class RvCommunication implements CommunicationInterface, TibrvMsgCallback
     public void init() {
         LOG.info("Initializing RV connection...");
         try {
-            System.loadLibrary("tibrvj64");
-//            System.loadLibrary("tibrvj");
             Tibrv.open(Tibrv.IMPL_NATIVE);
-            System.out.println(tibRvDescriptor.getService());
-            System.out.println(tibRvDescriptor.getNetwork());
-            System.out.println(tibRvDescriptor.getDaemon());
             rvdTransport = new TibrvRvdTransport(tibRvDescriptor.getService(),
                     tibRvDescriptor.getNetwork(), tibRvDescriptor.getDaemon());
             if (rvdTransport == null) {
@@ -53,7 +44,7 @@ public class RvCommunication implements CommunicationInterface, TibrvMsgCallback
             LOG.info("RV Listening on subject: " + cfg.getSubjectDescriptor().getSubject());
         } catch (Exception | UnsatisfiedLinkError e) {
             LOG.error("RV failed to initialize", e);
-            AdapterCore.shutDown(173);
+            AdapterCore.shutDown(1703);
         }
     }
 
@@ -82,11 +73,6 @@ public class RvCommunication implements CommunicationInterface, TibrvMsgCallback
         } catch (TibrvException e) {
             LOG.error("Failed to send response" + responseMsg.getText(), e);
         }
-    }
-
-    @Override
-    public void send(JmsMessageInterfaceWraper replyMsg, String destination) {
-
     }
 
     @Override

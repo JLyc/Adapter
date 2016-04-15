@@ -73,7 +73,6 @@ public abstract class SNMPplugin implements CustomAdapterInterface {
                     if(list.get(0).getIndex()!=null){
                         for (TableEvent e : list) {
                             LOG.debug("Processing received data...\n" + list);
-                            LOG.debug(list.size());
                             fillObject(e.getColumns()[0]);
                         }
                     }else{
@@ -96,7 +95,7 @@ public abstract class SNMPplugin implements CustomAdapterInterface {
 
             snmp.close();
         } catch (IOException e) {
-            LOG.error(e.toString());
+            LOG.error(e);
             resultCode = 1;
             descriptionText = e.getMessage();
             errorResponse(e);

@@ -2,5 +2,8 @@
 <project version="4">
   <component name="AntConfiguration">
     <buildFile url="file://$PROJECT_DIR$/Framework/generateClassFromXSD.xml" />
+    <buildFile url="file://$PROJECT_DIR$/Framework/build.xml" />
+    <buildFile url="file://$PROJECT_DIR$/Plugin_WeatherProbe/build.xml" />
+    <buildFile url="file://$PROJECT_DIR$/Plugin_U2000/build.xml" />
   </component>
 </project>

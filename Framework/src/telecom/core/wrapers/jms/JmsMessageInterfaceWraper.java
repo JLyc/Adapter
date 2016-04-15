@@ -107,35 +107,31 @@ public class JmsMessageInterfaceWraper extends JmsMessage implements Communicati
                     String strValueType = entry.getValue().getClass().getName();
                     if ("java.lang.Boolean".equals(strValueType))
                     {
-                        textMessage.setBooleanProperty(strKey, ((Boolean) entry.getValue())
-                                .booleanValue());
+                        textMessage.setBooleanProperty(strKey, (Boolean) entry.getValue());
                     }
                     else if ("java.lang.Byte".equals(strValueType))
                     {
-                        textMessage.setByteProperty(strKey, ((Byte) entry.getValue()).byteValue());
+                        textMessage.setByteProperty(strKey, (Byte) entry.getValue());
                     }
                     else if ("java.lang.Double".equals(strValueType))
                     {
-                        textMessage.setDoubleProperty(strKey, ((Double) entry.getValue())
-                                .doubleValue());
+                        textMessage.setDoubleProperty(strKey, (Double) entry.getValue());
                     }
                     else if ("java.lang.Float".equals(strValueType))
                     {
-                        textMessage.setFloatProperty(strKey, ((Float) entry.getValue())
-                                .floatValue());
+                        textMessage.setFloatProperty(strKey, (Float) entry.getValue());
                     }
                     else if ("java.lang.Integer".equals(strValueType))
                     {
-                        textMessage.setIntProperty(strKey, ((Integer) entry.getValue()).intValue());
+                        textMessage.setIntProperty(strKey, (Integer) entry.getValue());
                     }
                     else if ("java.lang.Long".equals(strValueType))
                     {
-                        textMessage.setLongProperty(strKey, ((Long) entry.getValue()).longValue());
+                        textMessage.setLongProperty(strKey, (Long) entry.getValue());
                     }
                     else if ("java.lang.Short".equals(strValueType))
                     {
-                        textMessage.setShortProperty(strKey, ((Short) entry.getValue())
-                                .shortValue());
+                        textMessage.setShortProperty(strKey, (Short) entry.getValue());
                     }
                     else if ("java.lang.String".equals(strValueType))
                     {

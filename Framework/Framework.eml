@@ -1,15 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<component inherit-compiler-output="true" inheritJdk="true">
-	<output-test url="file://$MODULE_DIR$/../out/test/Framework"/>
-	<exclude-output/>
+<component inheritJdk="true">
 	<contentEntry url="file://$MODULE_DIR$">
 		<testFolder url="file://$MODULE_DIR$/tests"/>
 	</contentEntry>
 	<levels>
-		<level name="generatedConfigFile" value="project"/>
 		<level name="ami" value="project"/>
-		<level name="tibrvj" value="project"/>
+		<level name="tibcrypt" value="project"/>
 		<level name="tibjms" value="project"/>
+		<level name="snmp4j-2.3.3_wp" value="project"/>
+		<level name="tibrvj" value="project"/>
+		<level name="logging" value="project"/>
+		<level name="native" value="project"/>
 		<level name="JmsRvApi" value="project"/>
+		<level name="generatedConfigFile" value="project"/>
+		<level name="commons-net-3.3" value="project"/>
+		<level name="commons-logging-1.1.3" value="project"/>
+		<level name="tibrvj_win" value="project"/>
 	</levels>
 </component>

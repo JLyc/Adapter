@@ -2,12 +2,11 @@
   <con:version>1.0</con:version>
   <!--Optional:-->
   <con:communication-type>
-    <con:rv>false</con:rv>
+    <con:rv>true</con:rv>
     <con:jms>false</con:jms>
   </con:communication-type>
   <!--Optional:-->
-  <!--<con:native-lib-definition>:/opt/tibco/tibrv/8.4/lib/64:/opt/tibco/tibrv/8.4/lib</con:native-lib-definition>-->
-  <!--<con:native-lib-definition>D:\tibco\tibrv\8.4\lib</con:native-lib-definition>-->
+  <con:native-lib-definition>:/opt/tibco7/tibrv/8.4/lib/64:/opt/tibco7/tibrv/8.4/lib</con:native-lib-definition>
   <!--Optional:-->
   <con:jms-descriptor>
     <con:context>com.tibco.tibjms.naming.TibjmsInitialContextFactory</con:context>
@@ -36,32 +35,32 @@
   <con:tibhawkrv-descriptor>
     <con:monitor-enabled>true</con:monitor-enabled>
     <!--Optional:-->
-    <con:service>7474</con:service>
-    <!--<con:service>7445</con:service>-->
+    <con:service>7445</con:service>
     <!--Optional:-->
-    <con:daemon>tcp:7474</con:daemon>
-    <!--<con:daemon>tcp:7445</con:daemon>-->
-    <con:micro-agent-name>Testing</con:micro-agent-name>
+    <con:daemon>tcp:7445</con:daemon>
+    <con:micro-agent-name>WeatherProbe_Adapter</con:micro-agent-name>
   </con:tibhawkrv-descriptor>
   <!--Optional:-->
   <con:subject-descriptor>
-    <con:subject>TMSK.DEV.CRM.CMN.U2000.ADAPTER.SUBSCRIBER</con:subject>
+    <con:subject>TMSK.DEV.CRM.CMN.WPROBE.ADAPTER.SUBSCRIBER</con:subject>
   </con:subject-descriptor>
   <!--Optional:-->
   <con:jms-response_subject>
-    <con:response_subject>TMSK.DEV.CRM.CMN.U2000.ADAPTER.SUBSCRIBER</con:response_subject>
+    <con:response_subject>TMSK.DEV.CRM.CMN.WPROBE.ADAPTER.SUBSCRIBER</con:response_subject>
   </con:jms-response_subject>
   <con:threads-descriptor>
-    <con:threadsNo>1</con:threadsNo>
+    <con:threadsNo>0</con:threadsNo>
   </con:threads-descriptor>
   <con:plugin-def-prop>
-    system=>com.cgi.eai.adapter.custom.telecom.plugin.u2000.U2000
-    <!--ip-address=>localhost-->
-    ip-address=>10.176.13.10
-    <!--port=>1112-->
-    port=>9819
-    user-name=>#!5AsQrh90x7GOkwyaAJrgor/RSFdAgfpghLnq3DQeewY=
-    user-pwd=>#!DGtwPAzMD9C3k/O9WXE6vVDetHQXpjjbgNdzcZvriT0=
+    system=>com.cgi.eai.adapter.custom.telecom.plugin.SNMP.WeatherProbes
+    snmp-version=>1
+    ip-address=>10.180.13.131
+    port=>161
+    community=>public
+    oid-max=>255
+    oiddepth=>4
+    request-type=>WALK
+    oid-name=>getStatus
     retries-count=>2
     timeout=>100
   </con:plugin-def-prop>

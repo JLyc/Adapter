@@ -3,4 +3,8 @@
 	<output-test url="file://$MODULE_DIR$/out/test/TelecomCustomAdapter"/>
 	<exclude-output/>
 	<contentEntry url="file://$MODULE_DIR$"/>
+	<levels>
+		<level name="commons-net-3.3" value="project"/>
+		<level name="logging" value="project"/>
+	</levels>
 </component>

@@ -67,7 +67,7 @@ public class WeatherProbes extends SNMPplugin {
             }
             return doc;
         } catch (ParserConfigurationException e) {
-        LOG.error(e);
+        LOG.error("Error on parsing response", e);
     }
     return null;
 }

@@ -1,0 +1,109 @@
+<project name="CustomAdapterFramework" default="buildFramework" basedir=".">
+    <description>Project of the CGI (c) 2015 - Tibco Custom Adapter.</description>
+
+    <!-- Properties: common. -->
+    <property name="sourceFileEncoding" value="Cp1250"/>
+    <property name="build.compiler" value="modern"/>
+    <property name="project.debug" value="on"/>
+    <property name="project.optimize" value="on"/>
+
+    <property name="src" value="${basedir}/src"/>
+    <property name="generated-src" value="${basedir}/generatedSrc"/>
+    <property name="generated-classes" value="${basedir}/generatedClasses"/>
+    <property name="generatedJar" value="generated.jar"/>
+    <property name="schema" value="${basedir}/schemas/resources"/>
+    <property name="config" value="${basedir}/config"/>
+    <property name="out" value="${basedir}/classes"/>
+    <property name="test" value="${basedir}/test"/>
+    <property name="lib" value="${basedir}/libs"/>
+    <property name="globallib" value="${basedir}/../libs"/>
+    <property name="localDeploy" value="${basedir}/../out/artifacts/FrameworkJar"/>
+    <property name="doc" value="${basedir}/doc"/>
+
+    <path id="master-classpath">
+        <fileset dir="${lib}">
+            <include name="*.jar"/>
+        </fileset>
+        <pathelement path="${localDeploy}"/>
+    </path>
+
+    <!-- Init -->
+    <target name="init">
+        <tstamp/>
+    </target>
+
+    <target name="prepareGeneration" depends="init">
+        <delete dir="${generated-src}"/>
+        <delete dir="${generated-classes}"/>
+        <mkdir dir="${generated-src}"/>
+        <mkdir dir="${generated-classes}"/>
+    </target>
+
+    <!-- Target: generate. Generate source code from XSD.  -->
+    <target name="generateCodeFromSchema" depends="prepareGeneration">
+        <java classname="com.sun.tools.internal.xjc.XJCFacade">
+            <!--            <arg value="-source"/>
+                        <arg value="2.0"/>-->
+            <arg value="-d"/>
+            <arg value="${generated-src}"/>
+            <arg value="${schema}"/>
+        </java>
+
+        <javac srcdir="${generated-src}" debug="true" destdir="${generated-classes}"/>
+        <jar destfile="${lib}/generated-src.jar">
+            <fileset dir="${generated-src}"/>
+        </jar>
+        <delete dir="${generated-src}"/>
+        <jar destfile="${lib}/${generatedJar}">
+            <fileset dir="${generated-classes}"/>
+        </jar>
+        <copy todir="${out}" overwrite="true" filtering="on">
+            <fileset dir="${generated-classes}">
+                <include name="**/*.class"/>
+            </fileset>
+        </copy>
+        <delete dir="${generated-classes}"/>
+    </target>
+
+    <!-- Target: prepare. -->
+    <target name="prepareCode" depends="init">
+        <delete dir="${localDeploy}"/>
+        <mkdir dir="${localDeploy}"/>
+    </target>
+
+    <!-- Target: compile. Compile framework. -->
+    <target name="compileFramework" depends="prepareCode, generateCodeFromSchema">
+        <javac destdir="${localDeploy}" encoding="${sourceFileEncoding}" debug="${project.debug}" optimize="${project.optimize}">
+            <src path="${src}"/>
+            <classpath refid="master-classpath"/>
+        </javac>
+        <copy todir="${localDeploy}" overwrite="true" filtering="on">
+            <fileset dir="${src}">
+                <include name="**/*.properties"/>
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="copySchema">
+        <mkdir dir="${localDeploy}/schema"/>
+        <copy todir="${localDeploy}/schema">
+            <fileset dir="${basedir}/schemas/resources" includes="*.xsd"/>
+        </copy>
+    </target>
+
+    <target name="copyConfig">
+        <copy todir="${localDeploy}/">
+            <fileset dir="${basedir}/config" includes="*"/>
+        </copy>
+    </target>
+
+    <!-- Target: buildFramework -->
+    <target name="buildFramework" depends="init, compileFramework, copySchema, copyConfig">
+        <jar jarfile="${basedir}/Framework.jar" basedir="${localDeploy}" manifest="${src}/META-INF/MANIFEST.MF">
+            <zipgroupfileset dir="${lib}" includes="*.jar"/>
+        </jar>
+        <delete dir="${out}"/>
+        <mkdir dir="${localDeploy}/jar"/>
+        <move file="${basedir}/Framework.jar" tofile="${localDeploy}/jar/Framework.jar"/>
+    </target>
+</project>
