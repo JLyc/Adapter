@@ -162,6 +162,7 @@ public class JmsRecorder extends MessageRecorder<JmsMessage> implements MessageL
                 logMessage(message, destinationName);
                 storeMsg(message);
                 msg.acknowledge();
+
             }
         }
         catch (JMSException jmsExc)

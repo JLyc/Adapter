@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<component inherit-compiler-output="true" inheritJdk="true">
+<component inherit-compiler-output="true" jdk="1.7" jdk_type="JavaSDK">
 	<output-test url="file://$MODULE_DIR$/../out/test/Plugin_WeatherProbe"/>
 	<exclude-output/>
 	<contentEntry url="file://$MODULE_DIR$">
@@ -8,5 +8,6 @@
 	<levels>
 		<level name="snmp4j-2.3.3_wp" value="project"/>
 		<level name="logging" value="project"/>
+		<level name="CustomAdapterInterface" value="project"/>
 	</levels>
 </component>

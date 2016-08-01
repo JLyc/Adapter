@@ -20,7 +20,7 @@
                 <xsd:element name="subject-descriptor" type="subject-descriptor" minOccurs="0"/>
                 <xsd:element name="jms-response_subject" type="jms-response_subject" minOccurs="0"/>
                 <xsd:element name="threads-descriptor" type="threads-descriptor" minOccurs="0"/>
-                <xsd:element name="plugin-def-prop" type="xsd:string" minOccurs="0"/>
+                <xsd:element name="plugin-def-prop" type="properties" minOccurs="0"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
@@ -100,6 +100,20 @@
             <xsd:element name="cmname" type="xsd:string" minOccurs="0"/>
             <!--Do not edit below this line-->
             <xsd:element name="micro-agent-name" type="xsd:string" minOccurs="1"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="properties">
+        <xsd:sequence>
+            <xsd:annotation>
+                <xsd:documentation>Descriptor of default plugin properties</xsd:documentation>
+            </xsd:annotation>
+            <xsd:element name="property" type="name_value" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="name_value">
+        <xsd:sequence>
+            <xsd:element name="name" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+            <xsd:element name="value" type="xsd:string" minOccurs="1" maxOccurs="1"/>
         </xsd:sequence>
     </xsd:complexType>
 </xsd:schema>

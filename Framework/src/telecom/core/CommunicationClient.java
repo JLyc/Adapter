@@ -97,7 +97,7 @@ public class CommunicationClient implements CommunicationClientInterface {
      * @param msg Rv or Jms message
      */
     public synchronized void request(CommunicationMessageInterface msg){
-        LOG.debug("Executing msg "+msg);
+        LOG.debug("Executing Request:\n "+msg.getText());
         AdapterStatistic.increaseValue("MsgCount", 1);
         executor.execute(new MessageLifeCycle(msg));
     }
@@ -110,7 +110,7 @@ public class CommunicationClient implements CommunicationClientInterface {
      * @param responseMsg response message Rv or Jms
      */
     public synchronized void response(CommunicationMessageInterface sourceMsg, CommunicationMessageInterface responseMsg){
-        LOG.debug("Response: "+responseMsg.getText());
+        LOG.debug("Executing Response:\n "+responseMsg.getText());
             if (responseMsg instanceof RVMessageInterfaceWraper) {
                 rvListener.sendReply(responseMsg, sourceMsg);
             }
@@ -124,17 +124,19 @@ public class CommunicationClient implements CommunicationClientInterface {
      */
     public void startListening(){
         if(rvListener !=null) {
-            new Thread(rvListener).start();
-            LOG.info("is Rv listening -> " + ((Thread) rvListener).isAlive());
+            Thread _rvListener = new Thread(rvListener);
+            _rvListener.start();
+            LOG.debug("is Rv listening -> " + _rvListener.isAlive());
         }
         if(jmsListener != null){
-            new Thread(jmsListener).start();
-            LOG.info("is Jms listening  -> " + ((Thread) jmsListener).isAlive());
+            Thread _jmsListener = new Thread(jmsListener);
+            _jmsListener.start();
+            LOG.debug("is Jms listening  -> " + _jmsListener.isAlive());
         }
         if(hawkMonitor != null){
             Thread _hawkMonitor = new Thread(hawkMonitor);
             _hawkMonitor.start();
-            LOG.info("is HawkRv monitoring -> " + _hawkMonitor.isAlive());
+            LOG.debug("is HawkRv monitoring -> " + _hawkMonitor.isAlive());
         }
         isListening = true;
     }

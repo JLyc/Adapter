@@ -7,5 +7,7 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/snmp4j-2.3.3_wp"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/logging"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/Framework"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/CustomAdapterInterface"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/-4.12.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

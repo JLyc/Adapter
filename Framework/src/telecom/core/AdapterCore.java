@@ -1,5 +1,6 @@
 package telecom.core;
 
+import com.cgi.eai.adapter.custom.telecom.config.*;
 import org.apache.commons.logging.*;
 import org.apache.log4j.*;
 import org.apache.log4j.net.SyslogAppender;
@@ -122,7 +123,7 @@ public class AdapterCore {
         communicationClient = CommunicationClient.getInstance();
         LOG.debug("Starting listeners...");
         communicationClient.startListening();
-        LOG.debug("Adapter is Ready and listening");
+        LOG.info("Adapter is Ready and listening");
     }
 
     /**

@@ -8,6 +8,7 @@
       <element id="directory" name="telecom">
         <element id="directory" name="core">
           <element id="file-copy" path="$PROJECT_DIR$/out/production/Framework/telecom/core/CustomAdapterInterface.class" />
+          <element id="file-copy" path="$PROJECT_DIR$/Framework/src/telecom/core/ResponseException.java" />
         </element>
       </element>
     </root>

@@ -6,8 +6,7 @@
     <con:jms>false</con:jms>
   </con:communication-type>
   <!--Optional:-->
-  <con:native-lib-definition>:/opt/tibco/tibrv/8.4/lib/64:/opt/tibco/tibrv/8.4/lib</con:native-lib-definition>
-  <!--<con:native-lib-definition>D:\tibco\tibrv\8.4\lib</con:native-lib-definition>-->
+  <con:native-lib-definition>/opt/tibco/tibrv/8.4/lib/64:/opt/tibco/tibrv/8.4/lib</con:native-lib-definition>
   <!--Optional:-->
   <con:jms-descriptor>
     <con:context>com.tibco.tibjms.naming.TibjmsInitialContextFactory</con:context>
@@ -17,7 +16,7 @@
     <con:login>tibco</con:login>
     <!--Optional:-->
     <con:password>tibco</con:password>
-    <con:url>tcp://10.97.105.225:7240</con:url>
+    <con:url>tcp://10.97.105.224:7230</con:url>
     <!--Optional:-->
     <con:jndi_login></con:jndi_login>
     <!--Optional:-->
@@ -26,39 +25,35 @@
   <!--Optional:-->
   <con:tibrv-descriptor>
     <!--Optional:-->
-    <con:service>7541</con:service>
+    <con:service>7531</con:service>
     <!--<con:service>7500</con:service>-->
     <!--Optional:-->
-    <con:daemon>tcp:7541</con:daemon>
+    <con:daemon>tcp:7531</con:daemon>
     <!--<con:daemon>tcp:7500</con:daemon>-->
   </con:tibrv-descriptor>
   <!--Optional:-->
   <con:tibhawkrv-descriptor>
     <con:monitor-enabled>true</con:monitor-enabled>
     <!--Optional:-->
-    <con:service>7474</con:service>
-    <!--<con:service>7445</con:service>-->
+    <con:service>7434</con:service>
     <!--Optional:-->
-    <con:daemon>tcp:7474</con:daemon>
-    <!--<con:daemon>tcp:7445</con:daemon>-->
-    <con:micro-agent-name>Testing</con:micro-agent-name>
+    <con:daemon>tcp:7434</con:daemon>
+    <con:micro-agent-name>U2000_Adapter</con:micro-agent-name>
   </con:tibhawkrv-descriptor>
   <!--Optional:-->
   <con:subject-descriptor>
-    <con:subject>TMSK.DEV.CRM.CMN.U2000.ADAPTER.SUBSCRIBER</con:subject>
+    <con:subject>TMSK.TST.CRM.CMN.U2000.ADAPTER.SUBSCRIBER</con:subject>
   </con:subject-descriptor>
   <!--Optional:-->
   <con:jms-response_subject>
-    <con:response_subject>TMSK.DEV.CRM.CMN.U2000.ADAPTER.SUBSCRIBER</con:response_subject>
+    <con:response_subject>TMSK.TST.CRM.CMN.U2000.ADAPTER.SUBSCRIBER</con:response_subject>
   </con:jms-response_subject>
   <con:threads-descriptor>
-    <con:threadsNo>0</con:threadsNo>
+    <con:threadsNo>1</con:threadsNo>
   </con:threads-descriptor>
   <con:plugin-def-prop>
     system=>com.cgi.eai.adapter.custom.telecom.plugin.u2000.U2000
-    <!--ip-address=>localhost-->
     ip-address=>10.176.13.10
-    <!--port=>1112-->
     port=>9819
     user-name=>#!5AsQrh90x7GOkwyaAJrgor/RSFdAgfpghLnq3DQeewY=
     user-pwd=>#!DGtwPAzMD9C3k/O9WXE6vVDetHQXpjjbgNdzcZvriT0=

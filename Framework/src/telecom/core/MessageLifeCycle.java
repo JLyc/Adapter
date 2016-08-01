@@ -1,5 +1,6 @@
 package telecom.core;
 
+import com.cgi.eai.adapter.custom.telecom.config.NameValue;
 import com.tibco.tibrv.TibrvException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -24,6 +25,7 @@ import javax.xml.transform.dom.*;
 import javax.xml.transform.stream.*;
 import java.io.*;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -38,15 +40,13 @@ public class MessageLifeCycle implements Runnable {
      * Load default attributes from config file
      * @return
      */
-    private static Map<String, String> loadDefaultAttributes() {
+    private static Map<String, String> loadDefaultAttributes(){
         Map<String, String> msgAttributes = new HashMap<>();
-        for (String line : Configuration.getInstance().getPluginDefProp().split("\n"))
+        for (NameValue line : Configuration.getInstance().getPluginDefProp())
         {
-            String[] nameValuePar = line.split("=>");
-            if(nameValuePar.length==2)
-                msgAttributes.put(nameValuePar[0].trim().toUpperCase(), nameValuePar[1].trim());
+            msgAttributes.put(line.getName().toUpperCase(), line.getValue());
         }
-        LOG.debug("Default attributes loaded");
+        LOG.debug(msgAttributes);
         return msgAttributes;
     }
 
@@ -68,15 +68,24 @@ public class MessageLifeCycle implements Runnable {
         CommunicationMessageInterface response=null;
         try {
             Map<String, String> msgAttributes = getMsgAttributes(msg.getText());
+            if(msgAttributes.isEmpty() || msgAttributes.get("SYSTEM")==null){
+                throw new ClassNotFoundException("No plugin class found. "+msgAttributes.get("SYSTEM"));
+            }
+            LOG.debug(msgAttributes.get("SYSTEM"));
             Class<?> clazz = Class.forName(msgAttributes.get("SYSTEM"));
             CustomAdapterInterface ec = (CustomAdapterInterface) clazz.newInstance();
             Document protocolResponse = ec.request(msgAttributes);
             response = createResponseFromDoc(protocolResponse);
 
-        } catch (Exception e) {
+        } catch (ResponseException e) {
+            LOG.error("Error at message thread but sending response", e);
+                response = createMsg((e.getMessage()));
+        } catch (IOException | InstantiationException | ParserConfigurationException | IllegalAccessException |
+                SAXException | ClassNotFoundException e) {
             LOG.error("Error at message thread", e);
-                response = createMsg(("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><response-message>\n\t<error>" + e.getMessage() + "</error>\n</response-message>"));
-        }finally{
+        } catch (Exception e){
+            LOG.error("bad behaviour");
+        } finally{
             CommunicationClient.getInstance().response(msg, response);
             long endTime = System.currentTimeMillis() - startTime;
             AdapterStatistic.increaseTime("ProcessingSumTime", endTime);

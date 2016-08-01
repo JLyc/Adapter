@@ -15,5 +15,5 @@ public interface CustomAdapterInterface {
      * @return response Map object
      * @throws Exception in case of fail message response
      */
-    public Document request(Map<String, String> att) throws Exception;
+    public Document request(Map<String, String> att) throws ResponseException;
 }

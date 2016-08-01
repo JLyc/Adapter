@@ -15,7 +15,7 @@ import java.util.regex.*;
 
 
 /**
- * Created by JLyc on 10. 4. 2015.
+ * Created by andrej.socha@cgi.com on 10. 4. 2015.
  */
 public abstract class TL1plugin implements CustomAdapterInterface {
     private static final Log LOG = LogFactory.getLog(TL1plugin.class);
@@ -48,15 +48,15 @@ public abstract class TL1plugin implements CustomAdapterInterface {
             doc.getDocumentElement().normalize();
             return doc;
         } catch (SAXException | ParserConfigurationException | IOException e) {
-            e.printStackTrace();
+            LOG.error(e.toString());
             return null;
         }
     }
 
     @Override
-    public Document request(final Map<String, String> attribute) throws Exception {
+    public Document request(final Map<String, String> attribute) throws ResponseException {
         try {
-            this.att= new HashMap<>(attribute);
+            this.att = new HashMap<>(attribute);
 
             telnet = new TelnetClient();
             telnet.connect(att.get("IP-ADDRESS"), Integer.parseInt(att.get("PORT")));
@@ -73,7 +73,7 @@ public abstract class TL1plugin implements CustomAdapterInterface {
             }
 
             for (String commad : getOperation()) {
-                LOG.debug("Calling command in form:"+ commad);
+                LOG.debug("Calling command in form:" + commad);
                 callCommand(commad);
             }
             if (!enrich.isEmpty()) {
@@ -81,21 +81,20 @@ public abstract class TL1plugin implements CustomAdapterInterface {
                 enriching();
             }
 
-            return createResponseObject(responseObject);
         } catch (Exception e) {
-//            e.printStackTrace();
             LOG.error(e.toString());
             resultCode = 1;
             descriptionText = e.getMessage();
-            return createResponseObject(responseObject);
-        } finally{
+        } finally {
             LOG.debug("Logging out...");
             tl1Logout();
             disconnect();
+            LOG.debug(responseObject);
+            return createResponseObject(responseObject);
         }
     }
 
-    protected abstract Document createResponseObject(Map<String, String> responseObject);
+    protected abstract Document createResponseObject(Map<String, String> responseObject) throws ResponseException;
 
     private void enriching() throws IOException {
         //enrich queue list of values
@@ -107,10 +106,10 @@ public abstract class TL1plugin implements CustomAdapterInterface {
             for (Map.Entry<String, String> searchEntry : responseObject.entrySet()) {
                 if (searchEntry.getKey().matches(parseEnrichingProperties.split("=")[0] + "\\d+") && searchEntry.getValue().equalsIgnoreCase(parseEnrichingProperties.split("=")[1])) {
                     String identificationIndex = searchEntry.getKey().substring(parseEnrichingProperties.split("=")[0].length());
-                    LOG.debug("Enriching data with command: "+parseEnrichingCommand);
+                    LOG.debug("Enriching data with command: " + parseEnrichingCommand);
                     write(constructDynamicCommandFromBaseForGroups(parseEnrichingCommand, responseObject, identificationIndex));
                     for (Map.Entry<String, String> fillingOutput : readTL1SucceedResponse(readUntil()).entrySet()) {
-                        preMergeOutput.put(fillingOutput.getKey() + identificationIndex, fillingOutput.getValue());
+                        preMergeOutput.put(fillingOutput.getKey().replaceFirst("\\d+", "") + identificationIndex, fillingOutput.getValue());
                     }
                 }
                 parseEnrichingCommand = entry.getKey();
@@ -127,6 +126,7 @@ public abstract class TL1plugin implements CustomAdapterInterface {
             String forReplace = matcher.group(index);
             command = command.replace(forReplace, base.get(forReplace.replaceAll("%", "") + group));
         }
+        LOG.debug("Command: "+command);
         return command;
     }
 
@@ -194,12 +194,13 @@ public abstract class TL1plugin implements CustomAdapterInterface {
                 }
                 for (int i = 0; i <= multiVlaues.length - 1; i++) {
                     for (int j = 0; j < name.length; j++) {
-                        partialOutput.put(name[j] + groupIndex, multiVlaues[i][j]);
+                        partialOutput.put(name[j]+groupIndex, multiVlaues[i][j]);
                     }
                     groupIndex++;
                 }
             }
         }
+        LOG.debug("Operation output: " + partialOutput);
         return partialOutput;
     }
 
@@ -212,43 +213,38 @@ public abstract class TL1plugin implements CustomAdapterInterface {
         try {
             return String.valueOf(ObfuscationEngine.decrypt(att.get("USER-PWD")));
         } catch (AXSecurityException e) {
-            e.printStackTrace();
+            LOG.error(e.toString());
+            return att.get("USER-PWD");
         }
-        return null;
     }
 
     private String getUname() {
         try {
             return String.valueOf(ObfuscationEngine.decrypt(att.get("USER-NAME")));
         } catch (AXSecurityException e) {
-            e.printStackTrace();
+            LOG.error(e.toString());
+            return att.get("USER-NAME");
         }
-        return null;
     }
 
-    private void tl1Logout() throws InterruptedException, IOException {
+    private void tl1Logout() {
         write("LOGOUT:::CTAG::;");
     }
 
     public String readUntil() throws IOException {
         StringBuilder sb = new StringBuilder();
-//        && !(sb.toString().matches(".+ENDESC.+"))
-        while (sb.toString().equals("") || !sb.toString().endsWith(";")){
-        while(bin.available()>0)
-        {
-            char c = (char)bin.read();
-//            if(c=='\n' || c=='\r')
-//            {
-//                continue;
-//            }
-            sb.append(c);
-        }}
+        while (sb.toString().equals("") || !sb.toString().endsWith(";")) {
+            while (bin.available() > 0) {
+                char c = (char) bin.read();
+                sb.append(c);
+            }
+        }
         String out = sb.toString().replace("\n", " ").replace("\r", " ");
-        System.out.println("****************************" + out + "****************************");
-        if (out.matches(".+ENDESC=Succeeded.+")||out.equals("")) {
+        if (out.matches(".+ENDESC=Succeeded.+") || out.equals("")) {
             return out;
         } else {
-            throw new IOException("Called command failed do response with success: " + out);
+//            Called command failed to response with success
+            throw new IOException("Called command failed: " + out);
         }
     }
 
@@ -276,10 +272,10 @@ public abstract class TL1plugin implements CustomAdapterInterface {
             }
         }
         String out = sb.toString().replace("\n", " ").replace("\r", " ");
-        if (out.matches(".+ENDESC=Succeeded.+")||out.equals("")) {
+        if (out.matches(".+ENDESC=Succeeded.+") || out.equals("")) {
             return out;
         } else {
-            throw new IOException("Called command failed do response with success: " + out);
+            throw new IOException("Called command failed: " + out);
         }
     }
 
@@ -289,7 +285,7 @@ public abstract class TL1plugin implements CustomAdapterInterface {
             out.println(value);
             out.flush();
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.toString());
         }
     }
 

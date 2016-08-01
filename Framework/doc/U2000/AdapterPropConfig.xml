@@ -49,17 +49,36 @@
     <con:response_subject>TMSK.DEV.CRM.CMN.U2000.ADAPTER.SUBSCRIBER</con:response_subject>
   </con:jms-response_subject>
   <con:threads-descriptor>
-    <con:threadsNo>1</con:threadsNo>
+    <con:threadsNo>0</con:threadsNo>
   </con:threads-descriptor>
   <con:plugin-def-prop>
-    system=>com.cgi.eai.adapter.custom.telecom.plugin.u2000.U2000
-    <!--ip-address=>localhost-->
-    ip-address=>10.176.13.10
-    <!--port=>1112-->
-    port=>9819
-    user-name=>#!5AsQrh90x7GOkwyaAJrgor/RSFdAgfpghLnq3DQeewY=
-    user-pwd=>#!DGtwPAzMD9C3k/O9WXE6vVDetHQXpjjbgNdzcZvriT0=
-    retries-count=>2
-    timeout=>100
+    <con:property>
+      <con:name>system</con:name>
+      <con:value>com.cgi.eai.adapter.custom.telecom.plugin.u2000.U2000</con:value>
+    </con:property>
+    <con:property>
+      <con:name>ip-address</con:name>
+      <con:value>10.176.13.10</con:value>
+    </con:property>
+    <con:property>
+      <con:name>port</con:name>
+      <con:value>9819</con:value>
+    </con:property>
+    <con:property>
+      <con:name>user-name</con:name>
+      <con:value>#!5AsQrh90x7GOkwyaAJrgor/RSFdAgfpghLnq3DQeewY=</con:value>
+    </con:property>
+    <con:property>
+      <con:name>user-pwd</con:name>
+      <con:value>#!DGtwPAzMD9C3k/O9WXE6vVDetHQXpjjbgNdzcZvriT0=</con:value>
+    </con:property>
+    <con:property>
+      <con:name>retries-count</con:name>
+      <con:value>2</con:value>
+    </con:property>
+    <con:property>
+      <con:name>timeout</con:name>
+      <con:value>100</con:value>
+    </con:property>
   </con:plugin-def-prop>
 </con:custom-adapter-config>

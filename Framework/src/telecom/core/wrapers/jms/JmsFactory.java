@@ -72,6 +72,7 @@ public class JmsFactory {
             }
 
             this.jmsSession = this.jmsConnection.createSession(false, 1);
+            LOG.debug(this.jmsSession);
         } else {
             LOG.info("JMS server not specified in configuration, skipping initialization...");
         }

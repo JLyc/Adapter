@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="CustomAdapterInterface">
+    <CLASSES />
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/Plugin_WeatherProbe/libs/CustomAdapterInterface.jar!/" />
+    </SOURCES>
+  </library>
+</component>

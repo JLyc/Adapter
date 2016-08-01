@@ -52,16 +52,49 @@
     <con:threadsNo>0</con:threadsNo>
   </con:threads-descriptor>
   <con:plugin-def-prop>
-    system=>com.cgi.eai.adapter.custom.telecom.plugin.SNMP.WeatherProbes
-    snmp-version=>1
-    ip-address=>10.180.13.131
-    port=>161
-    community=>public
-    oid-max=>255
-    oiddepth=>4
-    request-type=>WALK
-    oid-name=>getStatus
-    retries-count=>2
-    timeout=>100
+    <con:property>
+      <con:name>system</con:name>
+      <con:value>com.cgi.eai.adapter.custom.telecom.plugin.SNMP.WeatherProbes</con:value>
+    </con:property>
+    <con:property>
+      <con:name>snmp-version</con:name>
+      <con:value>1</con:value>
+    </con:property>
+    <con:property>
+      <con:name>ip-address</con:name>
+      <con:value>10.180.13.131</con:value>
+    </con:property>
+    <con:property>
+      <con:name>port</con:name>
+      <con:value>161</con:value>
+    </con:property>
+    <con:property>
+      <con:name>community</con:name>
+      <con:value>public</con:value>
+    </con:property>
+    <con:property>
+      <con:name>oid-max</con:name>
+      <con:value>255</con:value>
+    </con:property>
+    <con:property>
+      <con:name>oiddepth</con:name>
+      <con:value>4</con:value>
+    </con:property>
+    <con:property>
+      <con:name>request-type</con:name>
+      <con:value>WALK</con:value>
+    </con:property>
+    <con:property>
+      <con:name>oid-name</con:name>
+      <con:value>getStatus</con:value>
+    </con:property>
+    <con:property>
+      <con:name>retries-count</con:name>
+      <con:value>2</con:value>
+    </con:property>
+    <con:property>
+      <con:name>timeout</con:name>
+      <con:value>100</con:value>
+    </con:property>
   </con:plugin-def-prop>
 </con:custom-adapter-config>

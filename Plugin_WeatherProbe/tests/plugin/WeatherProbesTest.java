@@ -61,7 +61,7 @@ public class WeatherProbesTest {
         root.setLevel(Level.DEBUG);
         try {
             System.out.println(requestObject);
-            response = ec.request(requestObject);
+//            response = ec.request(requestObject);
         } catch (Exception e) {
             e.printStackTrace();
         }

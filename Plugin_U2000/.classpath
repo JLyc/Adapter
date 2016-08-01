@@ -5,8 +5,9 @@
 	<classpathentry kind="src" path="tests"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/logging"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Framework"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/commons-net-3.3"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/tibcrypt"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/Framework"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/-4.12.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

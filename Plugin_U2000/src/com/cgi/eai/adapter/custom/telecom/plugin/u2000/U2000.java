@@ -1,6 +1,9 @@
 package com.cgi.eai.adapter.custom.telecom.plugin.u2000;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.w3c.dom.*;
+import telecom.core.ResponseException;
 
 import javax.xml.parsers.*;
 import java.io.*;
@@ -10,11 +13,11 @@ import java.util.*;
  * Created by JLyc on 8. 4. 2015.
  */
 public class U2000 extends TL1plugin{
-
+    private static final Log LOG = LogFactory.getLog(U2000.class);
     public U2000() throws IOException {}
 
     @Override
-    protected Document createResponseObject(Map<String, String> responseObject) {
+    public Document createResponseObject(Map<String, String> responseObject) throws ResponseException {
         try {
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
             docFactory.setNamespaceAware(true);
@@ -36,47 +39,48 @@ public class U2000 extends TL1plugin{
             description.appendChild(doc.createTextNode(descriptionText));
             status.appendChild(description);
 
-            if(resultCode!=0){
-                return doc;
-            }
 
             Element operation = doc.createElement(this.att.get("OPERATION"));
             rootElement.appendChild(operation);
 
+            if (resultCode != 0) {
+                return doc;
+            }
 
-
-            int counter = 1;
             int maxCount = 0;
-            TreeSet<String> treeSet = new TreeSet<>();
+            Map<String, Integer> dupliciteCount = new HashMap<>();
             for (String key : responseObject.keySet()) {
-                if (!treeSet.add(key.replaceFirst("\\d", ""))) {
-                    if (counter++ > maxCount) {
-                        maxCount = counter;
-                    }
-                } else {
-                    counter = 1;
+                String makeKey = key.replaceFirst("\\d+", "");
+                Integer count = dupliciteCount.containsKey(makeKey)? dupliciteCount.get(makeKey) : 0;
+                dupliciteCount.put(makeKey, ++count);
+            }
+
+            for(Map.Entry<String, Integer> entry : dupliciteCount.entrySet()){
+                if(maxCount<entry.getValue()){
+                    maxCount = entry.getValue();
                 }
             }
 
-            for (int i = 0; i <= maxCount; i++) {
+            for (int i = 0; i < maxCount; i++) {
                 Element groupElement = doc.createElement("group");
                 operation.appendChild(groupElement);
-                for (String key : treeSet) {
-                    String name = key;
-                    if (maxCount > 0) {
-                        name = key + i;
+                for (Map.Entry<String, Integer> entry : dupliciteCount.entrySet()) {
+                    String name = entry.getKey();
+                    if (maxCount > 1) {
+                        name = entry.getKey()+ i;
                     }
                     if (responseObject.containsKey(name)) {
-                        Element nextElement = doc.createElement(key);
+                        Element nextElement = doc.createElement(entry.getKey());
                         nextElement.appendChild(doc.createTextNode(responseObject.get(name)));
                         groupElement.appendChild(nextElement);
                     }
                 }
             }
             return doc;
-        } catch (Exception e) {
-            e.printStackTrace();
+        }catch (Exception e){
+            LOG.error(e.toString());
+                throw new ResponseException("<tl1-response-message><status><result>2</result><description>"
+                        +e.toString()+"</description></status><"+this.att.get("OPERATION")+"/></tl1-response-message>");
         }
-        return null;
     }
 }

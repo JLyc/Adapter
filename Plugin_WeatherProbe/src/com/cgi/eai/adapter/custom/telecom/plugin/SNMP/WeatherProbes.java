@@ -5,6 +5,7 @@ import com.cgi.eai.adapter.custom.telecom.plugin.SNMP.plugin_properties.WeatherP
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.w3c.dom.*;
+import telecom.core.ResponseException;
 
 import javax.xml.parsers.*;
 import java.util.Map;
@@ -25,10 +26,11 @@ public class WeatherProbes extends SNMPplugin {
 
     /**
      * Method responsible for creating Document type response
+     *
      * @param responseObject
      * @return Document or Null if exception occurs
      */
-    protected Document createResponseObject(Map<String, String> responseObject) {
+    protected Document createResponseObject(Map<String, String> responseObject) throws ResponseException {
         try {
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
@@ -56,7 +58,7 @@ public class WeatherProbes extends SNMPplugin {
             attr.setValue(att.get("IP-ADDRESS"));
             operation.setAttributeNode(attr);
 
-            if(resultCode!=0) {
+            if (resultCode != 0) {
                 return doc;
             }
 
@@ -67,8 +69,9 @@ public class WeatherProbes extends SNMPplugin {
             }
             return doc;
         } catch (ParserConfigurationException e) {
-        LOG.error("Error on parsing response", e);
+            LOG.error(e.toString());
+            throw new ResponseException("<snmp-response-message><status><result>2</result><description>"
+                    + e.toString() + "</description></status><weatherProbe ip=\"" + att.get("IP-ADDRESS") + "\"/></snmp-response-message>");
+        }
     }
-    return null;
-}
 }

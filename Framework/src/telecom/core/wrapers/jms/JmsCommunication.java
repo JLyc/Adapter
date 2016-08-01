@@ -1,6 +1,7 @@
 package telecom.core.wrapers.jms;
 
 import com.cgi.eai.adapter.custom.telecom.config.JmsDescriptor;
+import com.logica.eai.test.bw.MessagePublisher;
 import com.logica.eai.test.bw.jms.JmsMessage;
 import com.logica.eai.test.bw.jms.JmsPropertyKey;
 import com.logica.eai.test.bw.jms.JmsType;
@@ -65,10 +66,10 @@ public class JmsCommunication implements CommunicationInterface {
         try {
             Destination destination = JmsFactory.getInstance().createDestination(Configuration.getInstance().getJmsResponseSubject().getResponseSubject(), JmsType.QUEUE);
             producer = JmsFactory.getInstance().createProducer(destination);
-            Properties jmsProp = new Properties();
-            jmsProp.put(JmsPropertyKey.JMSCorrelationID,((JmsMessage) sourceMsg).getMessage().getJMSCorrelationID() );
-            producer.send((Message) new JmsMessage(responseMsg.getText(), jmsProp));
-//            producer.send(((JmsMessageInterfaceWraper) responseMsg).getMessage());
+            Message response = ((JmsMessageInterfaceWraper) responseMsg).getMessage();
+            response.setJMSCorrelationID(((JmsMessage) sourceMsg).getMessage().getJMSCorrelationID());
+            response.setJMSType(((JmsMessage) sourceMsg).getMessage().getJMSType());
+            producer.send(response);
             LOG.info("Reply sent to QUEUE " + destination);
         } catch (JMSException e) {
             LOG.error("Unable reply on message", e);
@@ -86,10 +87,8 @@ public class JmsCommunication implements CommunicationInterface {
 
     @Override
     public void run() {
-        init();
-
         while (isListening) {
-            JmsMessageInterfaceWraper msg = (JmsMessageInterfaceWraper) jmsRecorder.getMsg(1);
+            JmsMessageInterfaceWraper msg = (JmsMessageInterfaceWraper) jmsRecorder.getMsg(5);
             if (msg != null) {
                 LOG.debug("Sending message to executor");
                 communicationClient.request(msg);

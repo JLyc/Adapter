@@ -39,7 +39,7 @@ public abstract class SNMPplugin implements CustomAdapterInterface {
      * @return response Map object
      * @throws Exception in case of fail message response
      */
-    public Document request(Map<String, String> att) {
+    public Document request(Map<String, String> att) throws ResponseException {
         try {
             this.att = new HashMap<>(att);
             String requestType = att.get("REQUEST-TYPE");
@@ -202,5 +202,5 @@ public abstract class SNMPplugin implements CustomAdapterInterface {
         return comtarget;
     }
 
-    protected abstract Document createResponseObject(Map<String, String> responseObject);
+    protected abstract Document createResponseObject(Map<String, String> responseObject) throws ResponseException;
 }

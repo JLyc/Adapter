@@ -11,6 +11,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.nio.file.Path;
+import java.util.List;
 
 /**
  * Created by JLyc on 26. 3. 2015.
@@ -113,8 +114,8 @@ public class Configuration {
         return generatedConfig.getTibhawkrvDescriptor();
     }
 
-    public String getPluginDefProp(){
-        return generatedConfig.getPluginDefProp();
+    public List<NameValue> getPluginDefProp(){
+        return generatedConfig.getPluginDefProp().getProperty();
     }
 
 }
