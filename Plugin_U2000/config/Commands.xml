@@ -17,5 +17,5 @@
     </getUpstream>
     <setSIP>
         <command>CFG-ONTVAINDIV::DID=%DID%,FN=%FN%,SN=%SN%,PN=%PN%,ONTID=%ONTID%,SIPUSERPWD_%SIPINDEX%=%SIPPWD%:1::;</command>
-    </setSIP>l
+    </setSIP>
 </operations>

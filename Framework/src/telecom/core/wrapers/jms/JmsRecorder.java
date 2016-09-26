@@ -124,8 +124,6 @@ public class JmsRecorder extends MessageRecorder<JmsMessage> implements MessageL
                     consumer.setMessageListener(null);
                     consumer.close();
                     consumer = null;
-//                    LOG.info("JMS Recorder for " + jmsType.toString() + ": " + destinationName
-//                            + " stopped...");
                 }
             }
             catch (JMSException jmsExc)
@@ -153,21 +151,13 @@ public class JmsRecorder extends MessageRecorder<JmsMessage> implements MessageL
      */
     public final void onMessage(final Message msg)
     {
-        try
+        synchronized (lockObject)
         {
-            // acknowledge msg
-            synchronized (lockObject)
-            {
-                JmsMessage message = new JmsMessageInterfaceWraper(msg);
-                logMessage(message, destinationName);
-                storeMsg(message);
-                msg.acknowledge();
-
-            }
-        }
-        catch (JMSException jmsExc)
-        {
-            throw new IntegrationRuntimeException("Acknowledge JMS message problem", jmsExc);
+            JmsMessage message = new JmsMessageInterfaceWraper(msg);
+            logMessage(message, destinationName);
+            storeMsg(message);
+//            removed due to late acknowledge of msg needed
+//                msg.acknowledge();
         }
     }
    

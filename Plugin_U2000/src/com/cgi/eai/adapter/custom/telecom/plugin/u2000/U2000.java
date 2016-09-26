@@ -9,9 +9,6 @@ import javax.xml.parsers.*;
 import java.io.*;
 import java.util.*;
 
-/**
- * Created by JLyc on 8. 4. 2015.
- */
 public class U2000 extends TL1plugin{
     private static final Log LOG = LogFactory.getLog(U2000.class);
     public U2000() throws IOException {}

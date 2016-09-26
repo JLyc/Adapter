@@ -12,9 +12,6 @@ import telecom.core.*;
 import java.io.*;
 import java.util.*;
 
-/**
- * Created by JLyc on 9. 4. 2015.
- */
 public abstract class SNMPplugin implements CustomAdapterInterface {
     private static final Log LOG = LogFactory.getLog(SNMPplugin.class);
 

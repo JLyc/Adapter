@@ -9,24 +9,23 @@
         </layout>
     </appender>
 
-    <!--<appender name="file" class="org.apache.log4j.RollingFileAppender">-->
-    <!--<param name="append" value="true" />-->
-    <!--<param name="maxFileSize" value="10MB" />-->
-    <!--<param name="maxBackupIndex" value="10" />-->
-    <!--<param name="file" value="logs/adapter_log.log" />-->
-    <!--<layout class="org.apache.log4j.PatternLayout">-->
-    <!--<param name="ConversionPattern"-->
-    <!--value="%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n" />-->
-    <!--</layout>-->
-    <!--</appender>-->
-
-    <appender name="RollingAppender" class="org.apache.log4j.DailyRollingFileAppender">
-        <param name="File" value="logs/adapter_log.log"/>
-        <param name="DatePattern" value="'.'yyyy-MM-dd"/>
+    <appender name="RollingAppender" class="org.apache.log4j.RollingFileAppender">
+        <param name="append" value="true"/>
+        <param name="maxFileSize" value="10MB"/>
+        <param name="maxBackupIndex" value="10"/>
+        <param name="file" value="logs/adapter_log.log"/>
         <layout class="org.apache.log4j.PatternLayout">
             <param name="ConversionPattern" value="[%p] %d %c %M - %m%n"/>
         </layout>
     </appender>
+
+    <!--<appender name="RollingAppender" class="org.apache.log4j.DailyRollingFileAppender">-->
+    <!--<param name="File" value="logs/adapter_log.log"/>-->
+    <!--<param name="DatePattern" value="'.'yyyy-MM-dd"/>-->
+    <!--<layout class="org.apache.log4j.PatternLayout">-->
+    <!--<param name="ConversionPattern" value="[%p] %d %c %M - %m%n"/>-->
+    <!--</layout>-->
+    <!--</appender>-->
 
     <root>
         <level value="DEBUG"/>

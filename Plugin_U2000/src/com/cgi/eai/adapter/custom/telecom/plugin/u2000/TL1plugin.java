@@ -173,9 +173,8 @@ public abstract class TL1plugin implements CustomAdapterInterface {
 
     private Map<String, String> readTL1SucceedResponse(String succeedMsg) {
         Map<String, String> partialOutput = new HashMap<>();
-        String[] helpString = null;
-        String[] name = null;
-        String[] values = null;
+        String[] helpString, name, values;
+
         Pattern pattern = Pattern.compile("-{9,}(.*)-{5}");
         Matcher matcher = pattern.matcher(succeedMsg);
         if (matcher.find()) {

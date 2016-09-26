@@ -28,10 +28,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by JLyc on 27. 3. 2015.
- */
-
 public class MessageLifeCycle implements Runnable {
     private static final Log LOG = LogFactory.getLog(MessageLifeCycle.class);
     private static final Map<String, String> defaultAttributes = loadDefaultAttributes();
@@ -79,12 +75,16 @@ public class MessageLifeCycle implements Runnable {
 
         } catch (ResponseException e) {
             LOG.error("Error at message thread but sending response", e);
+            try {
                 response = createMsg((e.getMessage()));
+            } catch (ResponseException e1) {
+                LOG.error(e1.getMessage());
+            }
         } catch (IOException | InstantiationException | ParserConfigurationException | IllegalAccessException |
-                SAXException | ClassNotFoundException e) {
+                SAXException | NullPointerException | ClassNotFoundException e) {
             LOG.error("Error at message thread", e);
         } catch (Exception e){
-            LOG.error("bad behaviour");
+            LOG.error("Bad behaviour, review source code for Class MessageLifeCycle");
         } finally{
             CommunicationClient.getInstance().response(msg, response);
             long endTime = System.currentTimeMillis() - startTime;
@@ -139,7 +139,7 @@ public class MessageLifeCycle implements Runnable {
      * @param doc Document returned from plugin
      * @return message in request message type
      */
-    private CommunicationMessageInterface createResponseFromDoc(Document doc) {
+    private CommunicationMessageInterface createResponseFromDoc(Document doc) throws NullPointerException {
         try {
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
@@ -149,12 +149,14 @@ public class MessageLifeCycle implements Runnable {
             StreamResult result = new StreamResult(writer);
             transformer.transform(source, result);
             return createMsg(writer.toString());
-        } catch (TransformerConfigurationException e) {
+        } catch (TransformerException  e) {
             e.printStackTrace();
-        } catch (TransformerException e) {
-            e.printStackTrace();
+            LOG.error("Unable to parse response DOM object");
+            throw new NullPointerException("Unable to parse response DOM object");
+        } catch (ResponseException e) {
+            LOG.error(e.getMessage());
+            throw new NullPointerException(e.getMessage());
         }
-        return null;
     }
 
     /**
@@ -162,7 +164,7 @@ public class MessageLifeCycle implements Runnable {
      * @param responseXml xml document to send as message
      * @return message of request type
      */
-    private CommunicationMessageInterface createMsg(String responseXml){
+    private CommunicationMessageInterface createMsg(String responseXml) throws ResponseException {
         CommunicationMessageInterface responseMsg= null;
         try {
             if(msg instanceof JmsMessageInterfaceWraper){
@@ -174,6 +176,7 @@ public class MessageLifeCycle implements Runnable {
             }
         } catch (JMSException |TibrvException e) {
             LOG.error("Unable to create message with response" + responseXml, e);
+            throw new ResponseException("Unable to create response msg object");
         }
         return responseMsg;
     }

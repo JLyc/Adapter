@@ -10,9 +10,6 @@ import telecom.core.ResponseException;
 import javax.xml.parsers.*;
 import java.util.Map;
 
-/**
- * Created by JLyc on 27. 3. 2015.
- */
 public class WeatherProbes extends SNMPplugin {
     private static final Log LOG = LogFactory.getLog(WeatherProbes.class);
 

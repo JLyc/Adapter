@@ -14,15 +14,13 @@ import java.nio.file.*;
 import java.util.*;
 
 /**
- * Created by JLyc on 26. 3. 2015.
- *
  * @author andrej.socha@cgi.com
  *         <p>
  *         Main class for Custom Adapter
  */
 public class AdapterCore {
     private static final Log LOG = LogFactory.getLog(AdapterCore.class);
-    // default unmutable params
+
     private static Level loglvl = Level.DEBUG;
     private static Path dConfig = Paths.get("AdapterPropConfig.xml");
     private static CommunicationClient communicationClient;
@@ -34,9 +32,11 @@ public class AdapterCore {
         init();
     }
 
+    /**
+     * Set native lib to be used mainly for *.so and *.dll native libs for RV communication
+     */
     private static void setNativeLib() {
-//        System.setProperty("java.library.path", System.getProperty("java.library.path") + File.pathSeparator + Configuration.getInstance().getNativeLibDefinition());
-        System.setProperty("java.library.path", System.getProperty("java.library.path") + ";D:\\tibco\\tibrv\\8.4\\bin");
+        System.setProperty("java.library.path", System.getProperty("java.library.path") + File.pathSeparator + Configuration.getInstance().getNativeLibDefinition());
         try {
             Field fieldSysPath = ClassLoader.class.getDeclaredField( "sys_paths" );
             fieldSysPath.setAccessible(true);

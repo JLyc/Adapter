@@ -1,9 +1,7 @@
 package telecom.core.wrapers.jms;
 
 import com.cgi.eai.adapter.custom.telecom.config.JmsDescriptor;
-import com.logica.eai.test.bw.MessagePublisher;
 import com.logica.eai.test.bw.jms.JmsMessage;
-import com.logica.eai.test.bw.jms.JmsPropertyKey;
 import com.logica.eai.test.bw.jms.JmsType;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -13,13 +11,12 @@ import telecom.core.CommunicationClientInterface;
 import telecom.core.wrapers.CommunicationInterface;
 import telecom.core.wrapers.CommunicationMessageInterface;
 
-import javax.jms.*;
+import javax.jms.Destination;
+import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.MessageProducer;
 import javax.naming.NamingException;
-import java.util.Properties;
 
-/**
- * Created by JLyc on 9. 4. 2015.
- */
 public class JmsCommunication implements CommunicationInterface {
     private static final Log LOG = LogFactory.getLog(JmsCommunication.class);
 
@@ -49,10 +46,11 @@ public class JmsCommunication implements CommunicationInterface {
     }
 
     public void close() {
-        LOG.info("Closing JMS connection....");
+        LOG.debug("Closing JMS connection....");
         jmsRecorder.stop();
         JmsFactory.getInstance().stop();
         JmsFactory.getInstance().close();
+        LOG.debug("JMS connection closed.");
     }
 
     @Override

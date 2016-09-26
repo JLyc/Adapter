@@ -1,5 +1,6 @@
 package telecom.core;
 
+import com.logica.eai.test.bw.jms.JmsMessage;
 import org.apache.commons.logging.*;
 import telecom.config.*;
 import telecom.core.wrapers.*;
@@ -8,10 +9,11 @@ import telecom.core.wrapers.rv.*;
 import telecom.monitoring.*;
 import telecom.statistic.*;
 
+import javax.jms.JMSException;
+import javax.jms.Message;
 import java.util.concurrent.*;
 
 /**
- * Created by JLyc on 26. 3. 2015.
  * @author andrej.socha@cgi.com
  *
  * Adapter communication client for Tibco <-> Custom Adapter communication by RV or JMS
@@ -81,7 +83,7 @@ public class CommunicationClient implements CommunicationClientInterface {
         executor.shutdown();
         LOG.info("Executor closing with: "+executor.getQueue().size()+" tasks at queues and "  +executor.getActiveCount()+" active tasks: ");
         try {
-            while(!(executor.getQueue().size()==0&&executor.getActiveCount()==00)){
+            while(!(executor.getQueue().size()== 0 &&executor.getActiveCount()== 0)){
                 TimeUnit.SECONDS.sleep(1);
             }
             executor.awaitTermination(1000, TimeUnit.MILLISECONDS);
@@ -111,11 +113,19 @@ public class CommunicationClient implements CommunicationClientInterface {
      */
     public synchronized void response(CommunicationMessageInterface sourceMsg, CommunicationMessageInterface responseMsg){
         LOG.debug("Executing Response:\n "+responseMsg.getText());
+
             if (responseMsg instanceof RVMessageInterfaceWraper) {
                 rvListener.sendReply(responseMsg, sourceMsg);
-            }
-            if (responseMsg instanceof JmsMessageInterfaceWraper) {
-                jmsListener.sendReply(responseMsg, sourceMsg);
+            }else if (responseMsg instanceof JmsMessageInterfaceWraper) {
+                try {
+                    ((JmsMessage) sourceMsg).getMessage().acknowledge();
+                    LOG.debug("JMS request msg acknowledged");
+                    jmsListener.sendReply(responseMsg, sourceMsg);
+                } catch (JMSException e) {
+                    LOG.error("Msg was unable to acknowledge. No response send, reprocessing msg");e.printStackTrace();
+                }
+            }else{
+                LOG.error("Unknown message type. No response send. Review source code for more information");
             }
     }
 
